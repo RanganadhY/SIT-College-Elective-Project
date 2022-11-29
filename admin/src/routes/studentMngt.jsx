@@ -12,42 +12,55 @@ function StudentMngt() {
 
     const navigate = useNavigate();
 
+    const [yearStart, setYearStart] = useState(0);
+    const [yearEnd, setYearEnd] = useState(0);
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
 
     const handleClickVeiwStudents =async (e)=>{
-        e.preventDefault();
-        console.log(branchOptionState);
-        navigate('/veiw-students')
-
+        const form = e.currentTarget;
+        if(form.checkValidity() === false){
+            e.preventDefault();
+            e.stopPropagation();
+        }else{
+            e.preventDefault();
+            e.stopPropagation();
+            console.log(branchOptionState, semisterOptionState,e.target.value);
+            // navigate(`/admin/students/${branchOptionState}/${semisterOptionState}`)
+        }
     }
     return (
         <>
             <AdminNavbar/>
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
-                    <form action="" className='student-mngt-form-container'>
+                    <form action="" onSubmit={handleClickVeiwStudents} className='student-mngt-form-container'>
                         <div className="student-mgnt-academic-container">
                             <label htmlFor="">Academic Year</label>
                             <input 
+                                required
                                 placeholder='YYYY'
                                 type="number" 
+                                onChange={(e)=>setYearStart(e.target.value)}
                                 min={2022}/>
                                 <span>To</span>
                             <input 
+                                required
                                 placeholder='YYYY' 
-                                type="number" />
+                                type="number"
+                                onChange={(e)=>setYearEnd(e.target.value)}
+                                min={parseInt(yearStart)+1}/>
                         </div>
                         <div className="student-mngt-credential-container">
-                            <label htmlFor="">Branch</label>
+                            <label htmlFor="branch">Branch</label>
                             <select 
-                                name="" 
+                                required
+                                name="branch" 
                                 id=""
-                                required="true"
                                 value={branchOptionState}
                                 onChange={(e)=>setbranchOptionState(e.target.value)}
                             >
-                                <option value="NA">-Select-</option>
+                                <option hidden selected value="">--Select--</option>
                                 <option value="AD">Artificial Intelligence & Data Science</option>
                                 <option value="BT"> Biotechnology</option>
                                 <option value="CH">Chemical Engineering</option>
@@ -65,26 +78,23 @@ function StudentMngt() {
                             </select>
                         </div>
                         <div className="student-mngt-credential-container student-mngt-semister-container">
-                            <label htmlFor="">Semister</label>
-                            <select 
-                                name="" 
+                            <label htmlFor="semester">Semester</label>
+                            <select
+                                name="semester" 
                                 id=""
-                                required="true"
+                                required
                                 value={semisterOptionState}
                                 onChange={(e)=>setsemisterOptionState(e.target.value)}
                             >
-                                <option value="NA">-Select-</option>
+                                <option hidden selected value="">--Select--</option>
                                 <option value="1">&#8544;</option>
                                 <option value="2">&#8545;</option>
                                 <option value="3">&#8546;</option>
                             </select>
                         </div>
                         <div className="student-mngt-button-actions">
-                            <button 
-                            type='submit'
-                            onClick={handleClickVeiwStudents}
-                            >Veiw Students</button>
-                            <button type='submit'>Veiw Passwords</button>
+                            <button type='submit' onClick={(e)=>e.target.value="students"}>View Students</button>
+                            <button type='submit' onClick={(e)=>e.target.value="passwords"}>View Passwords</button>
                         </div>
                     </form>
                     
