@@ -7,13 +7,14 @@ import {Routes,Route} from "react-router-dom"
 //importing all the jsx file or pages to use them as a 
 // components for the respective routes
 import AdminLogin from './routes/adminLogin';
-// import AdminDashboard from './routes/adminDashboard';
+import Mapping from "./routes/mapping"
+import ModifySubjects from './routes/modifySubjects';
+import Report from "./routes/report";
 import StudentMngt from "./routes/studentMngt";
 import SubjectMngt from "./routes/subjectMngt";
-import Report from "./routes/report";
-import Mapping from "./routes/mapping"
+import PageNotFound from "./routes/pageNotFound"
 import VeiwStudents from './routes/veiwStudents';
-import Tst from './routes/tst';
+
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
         <Route path='/mapping' element={<Mapping/>}/>
         <Route path='/report' element={<Report/>}/>
         <Route path='/veiw-students' element={<VeiwStudents/>}/>
-        <Route path='/test' element={<Tst/>}/>
+        <Route path='/modify-subjects' element={<ModifySubjects/>}/>
+        <Route path='*' element={<PageNotFound/>}/>
       </Routes>
     </>
   );

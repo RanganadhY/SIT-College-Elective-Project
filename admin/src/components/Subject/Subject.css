@@ -1,0 +1,222 @@
+/* -------add engeneering sciences courses styling-----  */
+.addESCSubject-main-wrapper{
+    width: 100%;
+    display: flex;
+    padding:1rem 0;
+}
+.addESCSubject-input-feilds-wrapper{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.addESCSubject-input-feilds-wrapper input{
+    padding: 0.65rem 0;
+    padding-left:0.3rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 0.09rem;
+    border: 1.5px solid rgb(202,202,202,0.5);
+    border-radius: 0.35rem;
+    color: #292929;
+    transition:150ms;
+}
+.addESCSubject-input-feilds-wrapper input:focus{
+    border: 1.75px solid rgb(202,202,202);
+    outline: none;
+    border-radius: 0.4rem;
+}
+.addESCSubject-input-subject-code-container{
+    width: 15%;
+}
+.addESCSubject-input-subject-name-container{
+    width: 40%;
+}
+.addESCSubject-input-subject-max-limit-container{
+    width: 10%;
+}
+.addESCSubject-input-subject-excluding-branches-container{
+    width: 20%;
+}
+
+.addESCSubject-add-button-container{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+.addESCSubject-add-button-container button{
+    width: 70%;
+    background-color: #404040;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.addESCSubject-add-button-container button:hover{
+    border:1.75px solid #292929;
+    background-color: transparent;
+    color: #292929;
+}
+/* --------add cycle subject course styling --------*/
+.addCycleSubject-main-wrapper{
+    width: 100%;
+    display: flex;
+    padding:1rem 0;
+}
+.addCycleSubject-input-feilds-wrapper{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}.addCycleSubject-input-feilds-wrapper input{
+    padding: 0.65rem 0;
+    padding-left:0.3rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 0.09rem;
+    border: 1.5px solid rgb(202,202,202,0.5);
+    border-radius: 0.35rem;
+    color: #292929;
+    transition:150ms;
+}
+.addCycleSubject-input-feilds-wrapper input:focus{
+    border: 1.75px solid rgb(202,202,202);
+    outline: none;
+    border-radius: 0.4rem;
+}
+.addCycleSubject-input-subject-code-container{
+    width: 15%;
+}
+.addCycleSubject-input-subject-name-container{
+    width: 40%;
+}
+.addCycleSubject-input-subject-max-limit-container{
+    width: 10%;
+}
+.addCycleSubject-input-subject-excluding-branches-container{
+    width: 20%;
+}
+
+.addCycleSubject-add-button-container{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+.addCycleSubject-add-button-container button{
+    width: 70%;
+    background-color: #404040;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.addCycleSubject-add-button-container button:hover{
+    border:1.75px solid #292929;
+    background-color: transparent;
+    color: #292929;
+}
+
+/* ----------Displaying Subjects Styling----------- */
+.modifySubjects-display-subject-wrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    
+}
+.modifySubject-disable-wrapper{
+    display: none;
+}
+.modifySubjects-display-subject-container{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+}
+.modifySubjects-display-subject-container input{
+    padding: 0.65rem 0;
+    padding-left:0.3rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 0.09rem;
+    border: 1.5px solid rgb(202,202,202,0.6);
+    border-radius: 0.35rem;
+    color: #292929;
+    transition:150ms;
+}
+.modifySubjects-display-subject-container input:focus{
+    border: 1.75px solid rgb(202,202,202);
+    outline: none;
+    border-radius: 0.4rem;
+}
+.modifySubjects-display-subject-code{
+    width: 15%;
+}
+.modifySubjects-display-subject-name{
+    width: 40%;
+}
+.modifySubjects-display-subject-max-limit{
+    width: 10%;
+}
+.modifySubjects-display-subject-excluding-branch-list{
+    width: 20%;
+}
+.modifySubjects-display-subject-allocated-cycle{
+    width: 20%;
+}
+
+.modifySubject-button-action-container{
+    width: 20%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.modifySubject-button-action-container .modifySubject-edit-button,
+.modifySubjects-delete-button{
+    background-color: #404040;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.modifySubject-button-action-container .modifySubject-edit-button:hover,
+.modifySubjects-delete-button:hover{
+    border:1.75px solid #292929;
+    background-color: transparent;
+    color: #292929;
+
+}
+.modifySubject-button-disabled{
+    display: none;
+}
+.modifySubject-save-button
+{
+    background-color: #2dba01;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.modifySubject-save-button:hover
+{
+    border:1.75px solid #2dba01;
+    background-color: transparent;
+    color: #2dba01;
+}

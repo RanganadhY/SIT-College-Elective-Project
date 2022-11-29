@@ -1,0 +1,56 @@
+.modifySubjects-main-wrapper{
+    width: 100%;
+    padding: 1rem 2rem;
+}
+.modifySubjects-part1-heading-container,
+.modifySubjects-part2-heading-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+}
+.modifySubjects-display-label-container{
+    padding-top: 3rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+.modifySubjects-display-label-container p{
+    font-size: 1.9rem;
+    font-weight: 550;
+    color:#101010;
+}
+.modifySubjects-display-subject-code-label-container{
+    width: 15%;
+}
+.modifySubjects-display-subject-name-label-container{
+    width: 40%;
+}
+.modifySubjects-display-subject-limit-label-container{
+    width: 10%;
+}
+.modifySubjects-display-subject-excluding-label-branches-container{
+    width: 20%;
+}
+.modifySubjects-display-subject-cycle-label-container{
+    width: 20%;
+}
+
+.modifySubjects-add-course-button-container button{
+    background-color: #2dba01;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.modifySubjects-add-course-button-container button:hover{
+    border:1.75px solid #2dba01;
+    background-color: transparent;
+    color: #2dba01;
+}

@@ -4,8 +4,8 @@ import AdminNavbar from '../components/adminNavbar/adminNavbar'
 function Tst() {
     return (
         <div>
-            <AdminNavbar/>
-            test
+            
+            <h1>page Not Found</h1>
         </div>
     )
 }

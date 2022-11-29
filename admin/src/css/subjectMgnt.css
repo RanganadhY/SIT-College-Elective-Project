@@ -1,0 +1,78 @@
+.subjectMgnt-mian-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+.subjectMgnt-main-container form{
+    height: 35vh;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+} 
+.subjectMgnt-main-container form p{
+    font-size: 1.8rem;
+    font-weight: 600;
+    padding:1rem;
+    letter-spacing: 0.09rem;
+    color: #8e01ba;
+}
+.subjectMgnt-credential-year-container{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.subjectMgnt-credential-year-container input{
+    width: 25%;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid rgb(106,105,103,0.95);
+    border-radius: 0.3rem;
+}
+.subjectMgnt-credential-year-container input:focus{
+    outline: none;
+    border: rgb(106,105,103,0.5) 1.75px solid;
+    border-radius: 0.5rem;
+}
+.subjectMgnt-credential-year-container span{
+    font-size: 1.5rem;
+}
+.subjectMgnt-credential-semester-container{
+    width: 45%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+.subjectMgnt-credential-semester-container select{
+    padding: 0.7rem 1rem;
+    border: 1.5px solid rgb(106,105,103,0.95);
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+.subjectMgnt-credential-buttons-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.subjectMgnt-credential-buttons-container button{
+    padding: 1rem 1.2rem;
+    background-color: #404040;
+    font-size: 1.7rem;
+    outline: none;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    letter-spacing: 0.07rem;
+    cursor: pointer;
+    transition-property:background-color border color;
+    transition-duration:350ms;
+    transition-timing-function:ease-in;
+}
+.subjectMgnt-credential-buttons-container button:hover{
+    border: 2px solid #292929;
+    color: #292929;
+    background-color:transparent;
+}

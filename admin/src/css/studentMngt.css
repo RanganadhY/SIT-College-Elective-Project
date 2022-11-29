@@ -31,6 +31,11 @@
     cursor: pointer;
 
 }
+.student-mgnt-academic-container input:focus{
+    border: none;
+    outline: rgb(106,105,103,0.5) 1.75px solid;
+    border-radius: 0.5rem;
+}
 .student-mngt-credential-container{
     width: 100%;
     display: flex;
@@ -73,18 +78,18 @@
 }
 .student-mngt-button-actions button{
     padding: 1rem;
-    background-color: #8e01ba;
+    background-color: #404040;
     outline: none;
-    color: aliceblue;
+    color: white;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
     transition-property:background-color border color;
     transition-duration:350ms;
-    transition-timing-function:cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition-timing-function:ease-in;
 }
 .student-mngt-button-actions button:hover{
-    border: 2px solid #8e01ba;
-    color: #8e01ba;
+    border: 2px solid #292929;
+    color: #292929;
     background-color:transparent;
 }

@@ -1,0 +1,52 @@
+.mapping-main-wrapper{
+    display: flex;
+    height: 80vh;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 0;
+}
+.mapping-main-container{
+    width: 60vw;
+}
+.mapping-lables-conatiner{
+    padding: 1rem 0;
+    margin: 1rem 0;
+    display:flex;
+}
+.mapping-labels-branch-p-tag{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 0.09rem;
+}
+.mapping-labels-cycle-p-tag{
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 0.09rem;
+}
+.mapping-save-button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+}
+.mapping-save-button-container button{
+    background-color: #2dba01;
+    outline: none;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 1rem 4.5rem;
+    color: white;
+    cursor: pointer;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
+}
+.mapping-save-button-container button:hover{
+    border:1.75px solid #2dba01;
+    background-color: transparent;
+    color: #2dba01;
+}
