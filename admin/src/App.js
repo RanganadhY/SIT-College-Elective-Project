@@ -13,7 +13,8 @@ import Report from "./routes/report";
 import StudentMngt from "./routes/studentMngt";
 import SubjectMngt from "./routes/subjectMngt";
 import PageNotFound from "./routes/pageNotFound"
-import VeiwStudents from './routes/veiwStudents';
+import ViewStudents from './routes/viewStudents';
+import ViewPasswords from './routes/viewPasswords';
 
 
 function App() {
@@ -26,8 +27,9 @@ function App() {
         <Route path='/subject-management' element={<SubjectMngt/>}/>
         <Route path='/mapping' element={<Mapping/>}/>
         <Route path='/report' element={<Report/>}/>
-        <Route path='/veiw-students' element={<VeiwStudents/>}/>
+        <Route path='/view-students' element={<ViewStudents/>}/>
         <Route path='/modify-subjects' element={<ModifySubjects/>}/>
+        <Route path='/view-passwords' element={<ViewPasswords/>}/>
         <Route path='*' element={<PageNotFound/>}/>
       </Routes>
     </>

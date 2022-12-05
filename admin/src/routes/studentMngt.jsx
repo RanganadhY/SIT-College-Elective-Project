@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom"
-
+import axios from "../axios/axios"
 
 //importing stylesheet
 import "../css/studentMngt.css"
@@ -17,7 +17,57 @@ function StudentMngt() {
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
 
-    const handleClickVeiwStudents =async (e)=>{
+    const handleViewStudents = () => {
+        const data = {
+            yearStart: yearStart,
+            yearEnd: yearEnd,
+            branch: branchOptionState,
+            semester: parseInt(semisterOptionState)
+        }
+        axios.post("/admin/view-students", data)
+        .then((res) => {
+            if(res.data.message==="successfull"){
+                if(res.data.data.length===0){
+                    alert("No students found");
+                }else{
+                    navigate("/view-students", {state: {data:res.data.data, academicYear:res.data.academicYear, branch:res.data.branch, semester:res.data.semester}});
+                }
+            }
+            else
+                alert(res.data.message);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert("something went wrong. Please try again later");
+        })
+    }
+
+    const handleViewPasswords = () =>{
+        const data = {
+            yearStart: yearStart,
+            yearEnd: yearEnd,
+            branch: branchOptionState,
+            semester: parseInt(semisterOptionState)
+        }
+        axios.post("/admin/view-passwords", data)
+        .then((res) => {
+            if(res.data.message==="successfull"){
+                if(res.data.data.length===0){
+                    alert("No students found");
+                }else{
+                    navigate("/view-passwords", {state: {data:res.data.data}});
+                }
+            }
+            else
+                alert(res.data.message);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert("something went wrong. Please try again later");
+        })
+    }
+
+    const handleSubmit =async (e)=>{
         const form = e.currentTarget;
         if(form.checkValidity() === false){
             e.preventDefault();
@@ -25,8 +75,11 @@ function StudentMngt() {
         }else{
             e.preventDefault();
             e.stopPropagation();
-            console.log(branchOptionState, semisterOptionState,e.target.value);
-            // navigate(`/admin/students/${branchOptionState}/${semisterOptionState}`)
+            if(e.nativeEvent.submitter.value==="students"){
+                handleViewStudents();
+            }else if(e.nativeEvent.submitter.value==="passwords"){
+                handleViewPasswords();
+            }
         }
     }
     return (
@@ -34,7 +87,7 @@ function StudentMngt() {
             <AdminNavbar/>
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
-                    <form action="" onSubmit={handleClickVeiwStudents} className='student-mngt-form-container'>
+                    <form action="" onSubmit={handleSubmit} className='student-mngt-form-container'>
                         <div className="student-mgnt-academic-container">
                             <label htmlFor="">Academic Year</label>
                             <input 

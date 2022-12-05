@@ -1,28 +1,28 @@
-.veiw-students-heading-container{
+.view-students-heading-container{
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
     color: #47022d ;
 }
-.veiw-students-buttons-action-container{
+.view-students-buttons-action-container{
     display: flex;
     justify-content:space-evenly;
     align-items: center;
     flex-wrap: wrap;
     padding: 1rem 0;
 }
-.veiw-students-strech-container{
+.view-students-strech-container{
     width: 70%;
 }
-.veiw-students-buttons-action-wrapper{
+.view-students-buttons-action-wrapper{
     width: 30%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
 }
-.veiw-students-buttons-action-wrapper button{
+.view-students-buttons-action-wrapper button{
     padding: 1rem 0.75rem;
     cursor: pointer;
     color: white;
@@ -34,7 +34,7 @@
     transition-timing-function:ease;
     transition-duration: 150ms;
 }
-.veiw-students-buttons-action-wrapper button:hover{
+.view-students-buttons-action-wrapper button:hover{
     border:#47022d 1.5px solid;
     background-color: transparent;
     color: #47022d;
@@ -42,20 +42,20 @@
 
 }
 
-.veiw-students-display-labels-container{
+.view-students-display-labels-container{
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-.veiw-students-display-labels-container .veiw-students-display-labels{
+.view-students-display-labels-container .view-students-display-labels{
     width: 25%;
     display: flex;
     justify-content: center;
     padding: 1rem 0;
     /* margin:0 0.5rem; */
 }
-.veiw-students-display-labels-serial-no{
+.view-students-display-labels-serial-no{
     width:5%;
     display: flex;
     justify-content: center;
@@ -63,7 +63,7 @@
     /* margin:0 0.5rem; */
 }
 
-.veiw-students-display-result-container{
+.view-students-display-result-container{
     /* width: 25%; */
     display: flex;
     justify-content: space-around;
@@ -71,14 +71,14 @@
     background-color: #F8EFE4;
     margin:0.75rem 0;
 }
-.veiw-students-display-result-serial-no{
+.view-students-display-result-serial-no{
     width:5%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin:0 0.5rem;
 }
-.veiw-students-display-result-container .veiw-students-display-result {
+.view-students-display-result-container .view-students-display-result {
     width: 25%;
     display: flex;
     justify-content: center;
@@ -86,27 +86,40 @@
     margin: 0 0.5rem;
 }
 
-.veiw-students-display-usn-result{
+.view-students-display-usn-result{
     width: 25%;
     display: flex;
     justify-content: center;
 }
-.veiw-students-display-usn-result input{
+.view-students-display-usn-result input{
     padding: 0.7rem 1rem;
     width: 50%;
     border: rgb(67,66,65,0.2) 1.5px solid;
     border-radius: 0.3rem;
     transition:150ms;
 }
-.veiw-students-display-result-container .veiw-students-display-result input{
+.view-students-display-result-container .view-students-display-result input{
     padding: 0.7rem 1rem;
     width: 100%;
     border: rgb(67,66,65,0.2) 1.5px solid;
     border-radius: 0.3rem;
     transition:150ms;
 }
-.veiw-students-display-result-container div input:focus{
+.view-students-display-result-container div input:focus{
     outline: none;
     border: rgb(106,105,103,0.5) 1.75px solid;
     border-radius: 0.5rem;
+}
+
+.download:disabled{
+    cursor: not-allowed;
+    background-color: rgb(106,105,103,0.5);
+}
+
+.download:disabled:hover{
+    cursor: not-allowed;
+    background-color: rgb(106,105,103,0.5);
+    border: none;
+    color: white;
+    font-weight: 500;
 }

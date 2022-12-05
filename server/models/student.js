@@ -1,7 +1,13 @@
 const mongoose = require("mongoose");
+const {semesters} = require("../utils/constants");
+const {branchCodes} = require("../utils/constants");
 
 const studentSchema = new mongoose.Schema({
-    usn:{
+    Name:{
+        type:String,
+        required:true
+    },
+    USN:{
         type:String,
         required:true,
         unique:true
@@ -11,8 +17,8 @@ const studentSchema = new mongoose.Schema({
         required:true
     },
     branch:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Branch'
+        type:String,
+        enum:branchCodes
     },
     academicYear:{
         type:String,
@@ -20,7 +26,7 @@ const studentSchema = new mongoose.Schema({
     },
     semester:{
         type:Number,
-        enum:[1,2]
+        enum:semesters
     },
     subEnrolled:[
         {
@@ -28,7 +34,7 @@ const studentSchema = new mongoose.Schema({
             ref:'Subject',
             sem:{
                 type:Number,
-                enum:[1,2]
+                enum:semesters
             }
         }
     ]

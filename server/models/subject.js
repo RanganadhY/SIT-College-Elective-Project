@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+const {branchCodes} = require("../utils/constants");
 
 const subjectSchema = new mongoose.Schema({
     name:{
+        type:String,
+        required:true
+    },
+    code:{
         type:String,
         required:true
     },
@@ -11,11 +16,10 @@ const subjectSchema = new mongoose.Schema({
     },
     enrolledCount:{
         type:Number,
-        required:true
+        default:0
     },
     cycle:{
         type:String,
-        required:true,
         enum:['physics, chemistry']
     },
     type:{
@@ -26,13 +30,19 @@ const subjectSchema = new mongoose.Schema({
     excludedBranches:[
         {
             type:String,
-            enum:['CS','AD','CV','IS','ML','BT','ME','IM','CH','EE','EC','EI','ET']
+            enum:branchCodes
         }
     ],
     allowedBranches:[
         {
             type:String,
-            enum:['CS','AD','CV','IS','ML','BT','ME','IM','CH','EE','EC','EI','ET']
+            enum:branchCodes
+        }
+    ],
+    mandatedBranches:[
+        {
+            type:String,
+            enum:branchCodes
         }
     ]
 },{timestamps:true});
