@@ -8,6 +8,7 @@ const cycleCodes = {
 }
 function CycleMapping(props) {
     
+    const handleSave = async(req,res,next)=>{}
 
     return (
         <>
@@ -20,13 +21,17 @@ function CycleMapping(props) {
                         />
                 </div>
                 <div className="cycleMapping-cycles-container">
+
+                    <label htmlFor={props.name}></label>
                     <input 
                         type="radio"
                         name={props.name}
+                        value="Physics"
                         />
                     <input 
                         type="radio"
                         name={props.name}
+                        value="Chemistry"
                         />
                 </div>
             </div>

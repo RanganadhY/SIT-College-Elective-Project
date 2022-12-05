@@ -1,81 +1,57 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from "../axios/axios";
 
 //importing shtylesheet
 import "../css/mapping.css";
+import "../components/cycleMapping/cycleMapping.css"
 
 //importing navbar
 import AdminNavbar from '../components/adminNavbar/adminNavbar'
-import CycleMapping from '../components/cycleMapping/cycleMapping';
 
 
 function Mapping() {
-    const CollageBarnches = [
-        {
-            "branchname":"Artificial Intelligence & Data Science",
-            "cycle":"P",
-            "branchCode":"AD"
-        },
-        {
-            "branchname":"Biotechnology",
-            "cycle":"P",
-            "branchCode":"BT"
-        },
-        {
-            "branchname":"Chemical Engineering",
-            "cycle":"P",
-            "branchCode":"CH"
-        },
-        {
-            "branchname":"Civil Engineering",
-            "cycle":"C",
-            "branchCode":"CV"
-        },
-        {
-            "branchname":"Computer Science and Engineering",
-            "cycle":"P",
-            "branchCode":"CS"
-        },
-        {
-            "branchname":"Computer Science and Engineering(AI&ML)",
-            "cycle":"P",
-            "branchCode":"ML"
-        },
-        {
-            "branchname":"Electrical and Electronics Engineering",
-            "cycle":"C",
-            "branchCode":"EE"
-        },
-        {
-            "branchname":"Electronics and Communication Engineering",
-            "cycle":"P",
-            "branchCode":"EC"
-        },
-        {
-            "branchname":"Electronics and Instrumentation Engineering",
-            "cycle":"P",
-            "branchCode":"EI"
-        },
-        {
-            "branchname":"Electronics & Telecommunication Engineering",
-            "cycle":"C",
-            "branchCode":"ET"
-        },
-        {
-            "branchname":"Industrial Engineering and Management",
-            "cycle":"P",
-            "branchCode":"IM"
-        },
-        {
-            "branchname":"Information Science and Engineering",
-            "cycle":"P",
-            "branchCode":"IS"
-        },
-        {
-            "branchname":"Mechanical Engineering",
-            "cycle":"C",
-            "branchCode":"ME"
-        },
-    ]
+    const [branchesList, setBranchesList] = useState([]);
+
+    const tempList = branchesList;
+
+    const handleSave = async()=>{
+        console.log(tempList)
+        const res = await axios.post("/admin/save-branches", tempList)
+                                .catch((err)=>{
+                                    console.log(err);
+                                    alert("Error in fetching branches. please try again later");
+                                });
+        if(res.data.message==="successfull"){
+            alert("Branches updated successfully");
+        }else{
+            alert("Error in updating branches. please try again later");
+        }
+    }
+    
+    const getBranches = async()=>{
+        const res = await axios.get("/admin/get-branches")
+                        .catch((err)=>{
+                            console.log(err);
+                            alert("Error in fetching branches. please try again later");
+                        });
+        if(res.data.message==="successfull"){
+            if(res.data.data.length===0){
+                alert("No branches found");
+            }else{
+                setBranchesList(res.data.data);
+            }
+        }else{
+            alert("Error in fetching branches. please try again later");
+        }
+    }
+
+    useEffect(() => {
+        async function fetchData(){
+            await getBranches();
+        }
+        fetchData();
+    }, [])
+
     return (
         <>
             <AdminNavbar/>
@@ -87,19 +63,34 @@ function Mapping() {
                         <p className='mapping-labels-cycle-p-tag'>C-Cycle</p>
                     </div>
                     {
-                        CollageBarnches.map((key,index)=>{
+                        branchesList.map((key,i)=>{
                             return(
-                            
-                                <CycleMapping
-                                    branchName = {CollageBarnches[index].branchname}
-                                    cycle= {CollageBarnches[index].cycle}
-                                    name = {CollageBarnches[index].branchCode}
-                                />
+                                <div className="cycleMapping-main-container">
+                                <div className="cycleMapping-branch-input-container">
+                                    <input 
+                                        type="text"
+                                        value={branchesList[i].name}
+                                        readOnly="true"
+                                        />
+                                </div>
+                                <div className="cycleMapping-cycles-container">
+                                    <input 
+                                        type="radio"
+                                        name={branchesList[i].code}
+                                        onChange={(e)=>{tempList[i].cycle = "physics"}}
+                                        />
+                                    <input 
+                                        type="radio"
+                                        name={branchesList[i].code}
+                                        onChange={(e)=>{tempList[i].cycle = "chemistry"}}
+                                        />
+                                </div>
+                            </div>
                             )
                         })
                     }
                     <div className="mapping-save-button-container">
-                        <button>Save</button>
+                        <button onClick={handleSave}>Save</button>
                     </div>
                 </div>
             </div>
