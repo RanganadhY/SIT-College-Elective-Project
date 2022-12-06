@@ -1,4 +1,5 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect} from 'react';
+import axios from "../axios/axios";
 //importing stylesheet
 import "../css/modifySubjects.css"
 //importing navbar
@@ -7,78 +8,23 @@ import AdminNavbar from '../components/adminNavbar/adminNavbar'
 import 
     {
         AddESCsubject,AddCyclesubject,
-        DisplayESCSubject,DisplayCycleSubject} from '../components/Subject/subject';
+        AddMDsubject,DisplayESCSubject,
+        DisplayCycleSubject,DisplayMDSubject} from '../components/Subject/subject';
 
-const engineeringSciencessubjects=[
-    {
-        'subjectCode':"code1",
-        "subjectName":"Subject 1",
-        "maxLimit":120,
-        "execludingBranches":["EC","CV"]
-    },
-    {
-        'subjectCode':"code2",
-        "subjectName":"Subject 2",
-        "maxLimit":240,
-        "execludingBranches":["EE"]
-    },
-    {
-        'subjectCode':"code3",
-        "subjectName":"Subject 3",
-        "maxLimit":60,
-        "execludingBranches":["CV"]
-    },
-    {
-        'subjectCode':"code4",
-        "subjectName":"Subject 4",
-        "maxLimit":240,
-        "execludingBranches":["ME","IM","CH"]
-    },
-    {
-        'subjectCode':"code5",
-        "subjectName":"Subject 5",
-        "maxLimit":60,
-        "execludingBranches":["CS","IS","AD","BT"]
-    }
-
-]
-
-const cycleSubjects = [
-    {
-        "subjectCode":"code1",
-        "subjectName":"Subject Name 1",
-        "allocatedCycle":"P",
-        "maxLimit":240,
-
-    },
-    {
-        "subjectCode":"code2",
-        "subjectName":"Subject Name 2",
-        "allocatedCycle":"P",
-        "maxLimit":140,
-        
-    },
-    {
-        "subjectCode":"code3",
-        "subjectName":"Subject Name 4",
-        "allocatedCycle":"C",
-        "maxLimit":240,
-        
-    },
-    {
-        "subjectCode":"code4",
-        "subjectName":"Subject Name 2",
-        "allocatedCycle":"C",
-        "maxLimit":60,
-        
-    },
-]
 function ModifySubjects() {
+
+    const [ESCsubject,setESCsubject] = useState([]);
+    const [CycleSubject,setCycleSubject] = useState([]);
+    const [mandatorySubjects, setMandatorySubjects] = useState([]);
+
     const [addMoreEsc, setaddMoreEsc] = useState([]);
     const [isEscCreated, setisEscCreated] = useState(false);
 
     const [addMoreCycleCourse, setaddMoreCycleCourse] = useState([]);
     const [isCycleCourseCreated, setisCycleCourseCreated] = useState(false);
+
+    const [addMoreMandatory, setaddMoreMandatory] = useState([]);
+    const [isMdCreated, setisMdCreated] = useState(false);
     
 
     const handleAddEscCourse = async ()=>{
@@ -93,7 +39,38 @@ function ModifySubjects() {
             setisCycleCourseCreated(false);
         }
     }
+    const handleAddMDCourse = async ()=>{
+        setaddMoreMandatory([...addMoreMandatory,{MD:""}])
+        if(isMdCreated){
+            setisMdCreated(false);
+        }
+    }
+
+    const getSubjects = async()=>{
+        const res = await axios.get("/admin/get-subjects")
+                            .catch((err)=>{
+                                console.log(err);
+                                alert("Error in fetching subjects. please try again later");
+                            });
+            if(res.data.message==="successfull"){
+                if(res.data.data.length===0){
+                    alert("No subjects found");
+                }else{
+                    setESCsubject(res.data.data.filter((item)=>item.type==="ESC"));
+                    setCycleSubject(res.data.data.filter((item)=>item.type==="CYC"));
+                    setMandatorySubjects(res.data.data.filter((item)=>item.type==="MD"));
+                }
+            }
+            else
+                alert(res.data.message);
+    }
     
+    useEffect(()=>{
+        async function fetchData(){
+            await getSubjects();
+        }
+        fetchData();
+    },[])
     
     return (
         <>
@@ -121,16 +98,16 @@ function ModifySubjects() {
                                     <p>Excluding Branches</p>
                                 </div>
                             </div>
-                            {engineeringSciencessubjects.map((key,index)=>{
+                            {ESCsubject.map((key,index)=>{
                                 var excludingBranchList = ""
-                                for(let i=0;i<engineeringSciencessubjects[index].execludingBranches.length;i++){
-                                    excludingBranchList = excludingBranchList+" "+engineeringSciencessubjects[index].execludingBranches[i]
+                                for(let i=0;i<ESCsubject[index].excludedBranches.length;i++){
+                                    excludingBranchList = excludingBranchList+" "+ESCsubject[index].excludedBranches[i]
                                 }
                                 return(
                                     <DisplayESCSubject
-                                        subjectCode = {engineeringSciencessubjects[index].subjectCode}
-                                        subjectName={engineeringSciencessubjects[index].subjectName}
-                                        maxLimit={engineeringSciencessubjects[index].maxLimit}
+                                        subjectCode = {ESCsubject[index].code}
+                                        subjectName={ESCsubject[index].name}
+                                        maxLimit={ESCsubject[index].maxCount}
                                         execludingBranches={excludingBranchList}
                                     />
                                 )
@@ -173,14 +150,14 @@ function ModifySubjects() {
                                     <p>Cycle</p>
                                 </div>
                             </div>
-                            {cycleSubjects.map((key,index)=>{
+                            {CycleSubject.map((key,index)=>{
                                 
                                 return(
                                     <DisplayCycleSubject
-                                        subjectCode = {cycleSubjects[index].subjectCode}
-                                        subjectName={cycleSubjects[index].subjectName}
-                                        maxLimit={cycleSubjects[index].maxLimit}
-                                        allocatedCycle={cycleSubjects[index].allocatedCycle}
+                                        subjectCode = {CycleSubject[index].code}
+                                        subjectName={CycleSubject[index].name}
+                                        maxLimit={CycleSubject[index].maxCount}
+                                        allocatedCycle={CycleSubject[index].cycle}
                                     />
                                 )
 
@@ -199,7 +176,53 @@ function ModifySubjects() {
                                 >Add Course</button>
                         </div>
                         
-                    </div>  
+                    </div>
+
+                    <div className="modifySubjects-part1-subjects-container">
+                        <div className="modifySubjects-part1-heading-container">
+                            <h3>Mandatory Courses</h3>
+                        </div>
+                        <div className="modifySubjects-part1-display-subjects-wrapper">
+                            <div className="modifySubjects-display-label-container">
+                                <div className="modifySubjects-display-subject-code-label-container">
+                                    <p>Subject Code</p>
+                                </div>
+                                <div className="modifySubjects-display-subject-name-label-container">
+                                    <p>Subject Name</p>
+                                </div>
+                                <div className="modifySubjects-display-subject-excluding-label-branches-container">
+                                    <p>Mandated Branches</p>
+                                </div>
+                            </div>
+                            {mandatorySubjects.map((key,index)=>{
+                                var mandatedBranchList = ""
+                                for(let i=0;i<mandatorySubjects[index].mandatedBranches.length;i++){
+                                    mandatedBranchList = mandatedBranchList+" "+mandatorySubjects[index].mandatedBranches[i]
+                                }
+                                return(
+                                    <DisplayMDSubject
+                                        subjectCode = {mandatorySubjects[index].code}
+                                        subjectName={mandatorySubjects[index].name}
+                                        mandatedBranches={mandatedBranchList}
+                                    />
+                                )
+
+                            })}
+                        </div>
+                        {
+                            addMoreMandatory.map(()=>{
+                                return(
+                                    <AddMDsubject/>
+                                )
+                            })
+                        }
+                        <div className="modifySubjects-add-course-button-container">
+                            <button
+                                onClick={handleAddMDCourse}
+                                >Add Course</button>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </>

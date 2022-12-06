@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from "../axios/axios"
+
 //importing stylesheet
 import "../css/subjectMgnt.css"
 
@@ -15,8 +17,27 @@ function SubjectMngt() {
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
 
     const handleSubjMgntModifySubjects = async()=>{
-        // navigate("/modify-subjects")
-        
+        const data = {
+            yearStart: yearStart,
+            yearEnd: yearEnd,
+            semester: parseInt(semisterOptionState)
+        }
+        axios.post("/admin/get-subjects", data)
+        .then((res) => {
+            if(res.data.message==="successfull"){
+                if(res.data.data.length===0){
+                    alert("No subjects found");
+                }else{
+                    navigate("/modify-subjects", {state: {data:res.data.data}});
+                }
+            }
+            else
+                alert(res.data.message);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert("something went wrong. Please try again later");
+        })
     }
 
     const handleviewSubjects = async()=>{

@@ -13,7 +13,7 @@ function AdminNavbar() {
                 </div>
                 <ul className='adminnavbar-navlink-list'>
                     <li><NavLink to="/student-management">Student Mngt</NavLink></li>
-                    <li><NavLink to="/subject-management">Subject Mngt</NavLink></li>
+                    <li><NavLink to="/modify-subjects">Subject Mngt</NavLink></li>
                     <li><NavLink to="/mapping">Mapping</NavLink></li>
                     <li><NavLink to="/report">Report</NavLink></li>
 

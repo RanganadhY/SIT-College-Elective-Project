@@ -8,11 +8,11 @@ const subjectSchema = new mongoose.Schema({
     },
     code:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     maxCount:{
         type:Number,
-        required:true
     },
     enrolledCount:{
         type:Number,
@@ -20,20 +20,14 @@ const subjectSchema = new mongoose.Schema({
     },
     cycle:{
         type:String,
-        enum:['physics, chemistry']
+        enum:['physics', 'chemistry']
     },
     type:{
         type:String,
         required:true,
-        enum:['optional','mandatory','engineering-science']
+        enum:['CYC','MD','ESC']
     },
     excludedBranches:[
-        {
-            type:String,
-            enum:branchCodes
-        }
-    ],
-    allowedBranches:[
         {
             type:String,
             enum:branchCodes
