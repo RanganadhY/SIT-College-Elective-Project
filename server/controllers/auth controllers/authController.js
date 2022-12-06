@@ -33,10 +33,9 @@ const studentLogin = async(req,res,next)=>{
     }
     try{
         const user = await sutdentModel.findOne({"USN":studentUsn}).select("+password");
-        console.log(user)
         if(!user){
             return res.status(404).json({
-                "message":"Invalid Credentials",
+                "message":"Student Not Present",
                 "status":404
             })
             
@@ -48,7 +47,7 @@ const studentLogin = async(req,res,next)=>{
             return
         }
         return res.status(401).json({
-            "message":"invalid Credentails",
+            "message":"Invalid Credentails",
             "status":401
         })
     }catch(error){

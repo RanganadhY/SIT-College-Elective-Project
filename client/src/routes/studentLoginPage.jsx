@@ -1,4 +1,4 @@
-import React ,{useState}from 'react'
+import React ,{useState,useEffect}from 'react'
 import {json, useNavigate} from "react-router-dom"
 //importing style sheet
 import "../css/studentLoginPage.css"
@@ -6,6 +6,8 @@ import "../css/studentLoginPage.css"
 import loginIllustration from "../assets/images/undraw_mobile_login_re_9ntv.svg"
 //importing axios
 import axios from "../axios/axios"
+//importing loader
+import Loader from "../components/loading component/loader";
 
 //importing auth hook
 import useAuth from '../hooks/useAuth';
@@ -17,8 +19,14 @@ function StudentLoginPage() {
 
     const [studentUsn, setstudentUsn] = useState("");
     const [studentPassword, setstudentPassword] = useState("");
-    const [errorMessage, seterrorMessage] = useState("")
+    const [errorMessage, seterrorMessage] = useState("");
+    const [isLoading, setisLoading] = useState(false);
 
+    //useEffect so that if any invalid msg is hwon based on that if user 
+    //is trying to enter the details again invalid mng will not be diplayed
+    useEffect(()=>{
+        seterrorMessage("")
+    },[studentUsn,studentPassword])
     const navigate = useNavigate();
     const handleStudentLogin = async(e)=>{
         e.preventDefault();
@@ -27,22 +35,27 @@ function StudentLoginPage() {
             "password":studentPassword
         }
         try{
-        
-            const studentLoginresponce = await axios.post("/authentication/student-login",studentEnteredDetails,
-            {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            })
-            .then((loginResponse)=>{
-                const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
-                window.localStorage.setItem("authInfo",JSON.stringify(authInfo))
-                navigate("/existing-subjects");
-
-                
-            })
-            .catch((error)=>{
-                throw(error)
-            })
+            setisLoading(true);
+            if(window.navigator.onLine){
+                const studentLoginresponce = await axios.post("/authentication/student-login",studentEnteredDetails,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                })
+                .then((loginResponse)=>{
+                    setisLoading(false)
+                    const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
+                    window.localStorage.setItem("authInfo",JSON.stringify(authInfo))
+                    navigate("/existing-subjects");
+                    
+                })
+                .catch((error)=>{
+                    throw(error)
+                })
+            }
+            else{
+                seterrorMessage("Please connect to Internet")
+            }
             // console.log(studentLoginresponce)
             // if(studentLoginresponce.data.token){
             //     navigate("/existing-subjects")
@@ -50,14 +63,22 @@ function StudentLoginPage() {
             
             
         }catch(error){
+                setisLoading(false)
                 seterrorMessage(error.response.data.message)
-                console.log(error.response.data.message)
+                
+        }
+        finally{
+            // seterrorMessage("Something Went Wrong")
+            setisLoading(false)
         }
     }
 
     
     return (
         <>
+            {
+                isLoading&&<Loader/>
+            }
             <div className="loginPage-main-wrapper">
                 <div className="loginPage-main-container">
                     <div className="loginPage-col0-container">
@@ -85,7 +106,7 @@ function StudentLoginPage() {
                                         </div>
                                         <div className="loginPage-feilds-wrapper">
                                             <input 
-                                                type="text"
+                                                type="password"
                                                 value={studentPassword}
                                                 onChange={(e)=>setstudentPassword(e.target.value)}
                                                 required="true"
@@ -102,8 +123,8 @@ function StudentLoginPage() {
                                             </div>
                                             
                                         </div>
-                                        <div className="loginPage-login-result-container">
-                                            {/* <p>Wrong Details</p> */}
+                                        <div className={errorMessage?"loginPage-login-result-container":".loginPage-login-result-display-none-container"}>
+                                            {errorMessage&&<p className=''>{errorMessage}</p>}
                                         </div>
                                 
                                 </div>

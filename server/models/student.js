@@ -50,27 +50,33 @@ const studentSchema = new mongoose.Schema({
 
 //hashing the password before saving it.
 // so we use pre method for the action save . then we hash it acoordingly
-studentSchema.pre("save",async function(next){
-    if(!this.isModified("password")){
-        next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password,salt);
-    next();
-});
+// studentSchema.pre("save",async function(next){
+//     if(!this.isModified("password")){
+//         next();
+//     }
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password,salt);
+//     next();
+// });
 
-studentSchema.pre("updateOne",async function(next){
-    const currentPassword = this;
-    const res = await studentSchema.find(currentPassword.password);
-    console.log(res)
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password,salt);
-    next();
-});
+// studentSchema.pre("updateOne",async function(next){
+//     const currentPassword = this;
+//     const res = await studentSchema.find(currentPassword.password);
+//     console.log(res)
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password,salt);
+//     next();
+// });
 
 //creating a admin method to verify the password is matched or not
 studentSchema.methods.matchPasswords = async function(password){
-    return await bcrypt.compare(password,this.password);
+    if(password === this.password){
+        return true
+    }
+    else{
+        return false
+    }
+    // return await bcrypt.compare(password,this.password);
 }
 
 //creating the json web token 

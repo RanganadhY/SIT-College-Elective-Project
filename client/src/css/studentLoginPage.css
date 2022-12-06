@@ -1,7 +1,7 @@
 .loginPage-main-wrapper{
     height: 100vh;
     /* background: linear-gradient(45deg,rgb(19,16,134,0.2),rgb(182,33,243,0.6)); */
-    background-color: #F4F3F4; 
+    background-color:rgb(206,202,206,0.5); 
     padding: 0 2rem;
     display: flex;
     align-items: center;
@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+    border-radius: 2rem;
     
 }
 .loginPage-col0-container{
@@ -99,12 +100,8 @@
     flex-direction: column;
     justify-content: space-between;
 }
-.loginPage-login-result-container{
-    padding: 1.5rem;
-}
-.loginPage-login-result-container p{
-    font-size: 2rem;
-}
+
+
 .loginPage-feilds-wrapper{
     position: relative;
     display: flex;
@@ -164,13 +161,31 @@
         padding: 0 4rem;
         transition: 0.3s; 
         cursor: pointer;  
+        outline: none;
 }
 .loginPage-login-button-container div button:hover{
     background-color: #e4e6eb; 
     color: #050505; 
     font-size: 15px; 
     transition: 0.3s; 
-    } 
+}
+.loginPage-login-result-container{
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+.loginPage-login-result-container p{
+    text-align: center;
+    width: 70%;
+    padding: 0.7rem;
+    font-size: 600;
+    background-color: #ff1a1a;
+    border-radius: 1rem;
+    color: white;
+}
+.loginPage-login-result-display-none-container{
+    display: none;
+}
 .loginPage-col2-container{
     width: 50%;
 
@@ -256,5 +271,13 @@
         background-color: #e4e6eb; 
         color: #050505; 
         font-size: 3rem; 
-        } 
+    }
+    .loginPage-login-result-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    } 
+    .loginPage-login-result-container p{
+        padding: 1.5rem;
+    }
 }
