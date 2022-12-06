@@ -4,6 +4,7 @@ const app=express();
 
 //admin routes
 const adminRoutes = require("./routes/admin");
+const studentRoutes = require("./routes/student");
 
 //authentication routes
 const auth = require("./routes/auth");
@@ -18,8 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //using routes
-app.use("/admin",adminRoutes);
 app.use("/authentication",auth);
+app.use("/admin",adminRoutes);
+app.use("/student",studentRoutes);
 
 app.all("/*",(req,res)=>{
     res.send("page not found");
