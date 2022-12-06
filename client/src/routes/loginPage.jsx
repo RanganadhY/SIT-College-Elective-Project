@@ -10,7 +10,7 @@ function LoginPage() {
             <div className="loginPage-main-wrapper">
                 <div className="loginPage-main-container">
                     <div className="loginPage-col0-container">
-                        <h2>Siddaganga Institue of Technology, Tumkuru</h2>
+                        <h2>Siddaganga Institue of Technology, Tumakuru</h2>
                     </div>
                     <div className="loginPage-col12-container">
                         <div className="loginPage-col1-container">
