@@ -8,10 +8,10 @@
     align-items: center;
 }
 
-.switch-main-container span{
-    font-size:2rem;
+.switch-main-container span.heading{
+    font-size:3rem;
     align-self: center;
-    /* margin: 0 2rem; */
+    padding: 0 2rem;
 }
 
 .container {

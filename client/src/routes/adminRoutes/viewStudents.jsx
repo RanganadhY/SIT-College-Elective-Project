@@ -8,14 +8,17 @@ import axios from "../../axios/axios";
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
 
+import { AdminLoader } from '../../components/loading component/loader';
+
 function ViewStudents() {
 
     const stateData = useLocation().state;
     const [studentsList, setStudentsList] = useState(stateData.data);
     const [downloadEnable, setDownloadEnable] = useState(true);
+    const [isLoading, setisLoading] = useState(false);
 
     const handleDownload = async()=>{
-
+        setisLoading(true);
         let newList = [];
         for(let i=0;i<studentsList.length;i++){
             let temp = {
@@ -30,14 +33,17 @@ function ViewStudents() {
 
         XLSX.utils.book_append_sheet(fullBook, fullSheet, "Student Passwords");
         XLSX.writeFile(fullBook, "Student Passwords.xlsx");
+        setisLoading(false);
     }
 
     const handleSavePassword=async(studentData)=>{
+        setisLoading(true);
         const response = await axios.post("/admin/save-passwords",studentData)
                         .catch((err)=>{
                             console.log(err);
                             alert("Something Went Wrong. Please try again later");
                         });
+        setisLoading(false);
         if(response.status===200 && response.data.message==="successfull"){
             setStudentsList(studentData);
             setDownloadEnable(false);
@@ -65,6 +71,9 @@ function ViewStudents() {
     return (
         <>
             <AdminNavbar/>
+            {
+                isLoading && <AdminLoader/>
+            }
             <div className="view-students-main-wrapper">
                 <div className="view-students-main-container">
                     <div className="view-students-heading-container">

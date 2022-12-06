@@ -108,7 +108,6 @@ const getBranches = async(req,res,next)=>{
 
 const saveBranches = async(req,res,next)=>{
     try{
-        console.log("hi")
         //capturing the details from the body of the request
         const branchData = req.body;
 

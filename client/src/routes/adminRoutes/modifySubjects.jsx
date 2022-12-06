@@ -4,6 +4,7 @@ import axios from "../../axios/axios";
 import "../../css/adminCss/modifySubjects.css"
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
+import { AdminLoader } from '../../components/loading component/loader';
 //importing addSubject Compnent
 import 
     {
@@ -26,6 +27,7 @@ function ModifySubjects() {
     const [addMoreMandatory, setaddMoreMandatory] = useState([]);
     const [isMdCreated, setisMdCreated] = useState(false);
     
+    const [loading, setLoading] = useState(true);
 
     const handleAddEscCourse = async ()=>{
         setaddMoreEsc([...addMoreEsc,{ESC:""}])
@@ -66,16 +68,22 @@ function ModifySubjects() {
     }
     
     useEffect(()=>{
+        setLoading(true);
         async function fetchData(){
             await getSubjects();
         }
         fetchData();
+        setLoading(false);
     },[])
     
     return (
         <>
             <AdminNavbar/>
-            <div className="modifySubjects-main-wrapper">
+            {
+                loading === true && <AdminLoader/>
+            }
+            {
+                loading === false && <div className="modifySubjects-main-wrapper">
                 <div className="modifySubjects-main-container">
 
 
@@ -225,6 +233,7 @@ function ModifySubjects() {
                     </div>
                 </div>
             </div>
+            }
         </>
     )
 }

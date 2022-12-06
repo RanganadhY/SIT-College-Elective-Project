@@ -56,7 +56,7 @@ const getStudentDetails = async(req,res,next) =>{
         const availableCYCCourses = await Subject.find({_id:{$nin: studiedSubjectsIds}, type:"CYC", cycle:cycle},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
 
         //send the applicable ESC and CYC courses of the student
-        res.send({"message":"successfull","data":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}]});
+        res.send({"message":"successfull","eligibleSubjects":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}]});
     }catch(err){
         //sending the error message in case something goes wrong
         console.log(err)
