@@ -27,7 +27,7 @@ function ModifySubjects() {
     const [addMoreMandatory, setaddMoreMandatory] = useState([]);
     const [isMdCreated, setisMdCreated] = useState(false);
     
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleAddEscCourse = async ()=>{
         setaddMoreEsc([...addMoreEsc,{ESC:""}])
@@ -49,31 +49,32 @@ function ModifySubjects() {
     }
 
     const getSubjects = async()=>{
+        setLoading(true);
         const res = await axios.get("/admin/get-subjects")
                             .catch((err)=>{
                                 console.log(err);
                                 alert("Error in fetching subjects. please try again later");
+                                setLoading(false);
                             });
-            if(res.data.message==="successfull"){
-                if(res.data.data.length===0){
-                    alert("No subjects found");
-                }else{
-                    setESCsubject(res.data.data.filter((item)=>item.type==="ESC"));
-                    setCycleSubject(res.data.data.filter((item)=>item.type==="CYC"));
-                    setMandatorySubjects(res.data.data.filter((item)=>item.type==="MD"));
-                }
+        if(res.data.message==="successfull"){
+            if(res.data.data.length===0){
+                alert("No subjects found");
+            }else{
+                setESCsubject(res.data.data.filter((item)=>item.type==="ESC"));
+                setCycleSubject(res.data.data.filter((item)=>item.type==="CYC"));
+                setMandatorySubjects(res.data.data.filter((item)=>item.type==="MD"));
             }
-            else
-                alert(res.data.message);
+        }
+        else
+            alert(res.data.message);
+        setLoading(false);
     }
     
     useEffect(()=>{
-        setLoading(true);
         async function fetchData(){
             await getSubjects();
         }
         fetchData();
-        setLoading(false);
     },[])
     
     return (

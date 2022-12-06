@@ -94,8 +94,7 @@ function StudentMngt() {
             {
                 isLoading&&<AdminLoader/>
             }
-            {
-                !isLoading && <div className="student-mngt-main-wrapper">
+            <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
                     <form action="" onSubmit={handleSubmit} className='student-mngt-form-container'>
                         <div className="student-mgnt-academic-container">
@@ -163,7 +162,6 @@ function StudentMngt() {
                     
                 </div>
             </div>
-            }
         </>
     )
 }
