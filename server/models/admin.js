@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 
 const adminSchema = new mongoose.Schema({
-    email:{
+    username:{
         type:String,
         required:true
     },
@@ -14,6 +14,10 @@ const adminSchema = new mongoose.Schema({
     role:{
         type:Number,
         default:379832798327
+    },
+    subjectSelection:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true});
 

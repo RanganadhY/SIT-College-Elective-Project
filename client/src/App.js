@@ -18,7 +18,7 @@ import SubjectMngt from "./routes/adminRoutes/subjectMngt";
 import VeiwElidgibleSubjects from "./routes/studentRoutes/veiwElidgileSubjects"
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
-
+import EnableDisable from './routes/adminRoutes/enable-disable';
 
 
 
@@ -39,6 +39,9 @@ function App() {
         
           <Route path='/admin-login' element={<AdminLogin/>}/>
           <Route path='/' element={<StudentLogin/>}/>
+
+
+          {/* ----------Admin Protected Routes ---------*/}
           <Route element={<AuthRoute allowedRoles={[ROLES.Admin]}/>}>
             
             <Route path='/mapping' element={<Mapping/>}/>
@@ -48,12 +51,14 @@ function App() {
             <Route path='/report' element={<Report/>}/>
             <Route path='/view-students' element={<ViewStudents/>}/>
             <Route path='/view-passwords' element={<ViewPasswords/>}/>
+            <Route path="/selection-enable-disable" element={<EnableDisable/>}/>
           </Route>
-          
+
+          {/* -------Student Protected Routes-------- */}
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>
             <Route path="/existing-subjects" element={<VeiwElidgibleSubjects/>}/>
           </Route>
-
+          {/* -------Page Not Found----- */}
           <Route path='*' element={<PageNotFound/>}/>
           
       </Routes>

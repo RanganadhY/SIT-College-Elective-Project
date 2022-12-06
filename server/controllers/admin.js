@@ -2,6 +2,7 @@ const Upload = require("../models/upload");
 const Branch = require("../models/branch");
 const Student = require("../models/student");
 const Subject = require("../models/subject");
+const Admin = require("../models/admin");
 const {branchCodes, semesters} = require("../utils/constants");
 
 const viewStudents = async(req,res,next)=>{
@@ -386,6 +387,34 @@ const deleteSubjectMD = async(req,res,next)=>{
     }
 }
 
+const getStatus = async(req,res,next)=>{
+
+    //get the status from admin model
+    const adminDetails = await Admin.find({});
+
+    //if no admin is found
+    if(adminDetails.length===0){
+        res.status(400).send({"message":"no admin found"});
+        return
+    }
+    const status = adminDetails[0].subjectSelection;
+
+    //send the status
+    res.status(200).send({"message":"successfull","status":status});
+}
+
+const setStatus = async(req,res,next)=>{
+    
+    //get the status value from req
+    const {status} = req.body;
+
+    //update the status
+    await Admin.updateMany({},{subjectSelection:status});
+
+    //send the response
+    res.status(200).send({"message":"successfull"});
+}
+
 module.exports = {
     viewStudents, 
     viewPasswords, 
@@ -401,5 +430,7 @@ module.exports = {
     deleteSubjectCYC, 
     addSubjectMD, 
     editSubjectMD, 
-    deleteSubjectMD
+    deleteSubjectMD,
+    getStatus,
+    setStatus
 }
