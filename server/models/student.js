@@ -45,6 +45,10 @@ const studentSchema = new mongoose.Schema({
             }
         }
     ],
+    selectedSems:{
+        type:[Boolean],
+        default:[false,false,false,false,false,false,false,false]
+    },
     role:{
         type:Number,
         default:780907276

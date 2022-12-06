@@ -20,6 +20,7 @@ function StudentMngt() {
     const [isLoading, setisLoading] = useState(false);
 
     const handleViewStudents = () => {
+        setisLoading(true);
         const data = {
             yearStart: yearStart,
             yearEnd: yearEnd,
@@ -41,10 +42,12 @@ function StudentMngt() {
         .catch((err) => {
             console.log(err);
             alert("something went wrong. Please try again later");
-        })
+        });
+        setisLoading(false);
     }
 
     const handleViewPasswords = () =>{
+        setisLoading(true);
         const data = {
             yearStart: yearStart,
             yearEnd: yearEnd,
@@ -67,10 +70,10 @@ function StudentMngt() {
             console.log(err);
             alert("something went wrong. Please try again later");
         })
+        setisLoading(false);
     }
 
     const handleSubmit =async (e)=>{
-        setisLoading(true);
         const form = e.currentTarget;
         if(form.checkValidity() === false){
             e.preventDefault();
@@ -84,13 +87,12 @@ function StudentMngt() {
                 handleViewPasswords();
             }
         }
-        setisLoading(false);
     }
     return (
         <>
             <AdminNavbar/>
             {
-                isLoading && <AdminLoader/>
+                isLoading&&<AdminLoader/>
             }
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">

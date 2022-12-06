@@ -27,13 +27,13 @@ const getStudentDetails = async(req,res,next) =>{
         //find cycle from branch of the student
         const branchDetails = await Branch.find({code:branchCode});
         const cycle = branchDetails[0].cycle;
-
         //get the subject _id of the studied subjects
         let studiedSubjectsIds = []
-        for(let i=0;i<studiedSubjects.length;i++){
-            studiedSubjectsIds.push(studiedSubjects[i].subject._id);
+        if(studiedSubjects.length !== 0){
+            for(let i=0;i<studiedSubjects.length;i++){
+                studiedSubjectsIds.push(studiedSubjects[i].subject._id);
+            }    
         }
-
         //find ESC courses which are not studied by the student and use a loop to get the courses where student branch is not excluded
         const ESCCourses = await Subject.find({_id:{$nin: studiedSubjectsIds}, type:"ESC"},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0});
         let availableESCCourses = [];
@@ -56,7 +56,7 @@ const getStudentDetails = async(req,res,next) =>{
         const availableCYCCourses = await Subject.find({_id:{$nin: studiedSubjectsIds}, type:"CYC", cycle:cycle},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
 
         //send the applicable ESC and CYC courses of the student
-        res.send({"message":"successfull","eligibleSubjects":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}]});
+        res.send({"message":"successfull","eligibleSubjects":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}],"studentProfile":{"name":studentDetails[0].Name,"branch":branchDetails[0].name,"cycle":branchDetails[0].cycle}});
     }catch(err){
         //sending the error message in case something goes wrong
         console.log(err)

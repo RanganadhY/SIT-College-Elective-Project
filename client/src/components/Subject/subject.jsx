@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import axios from "../../axios/axios";
+import {AdminLoader} from "../loading component/loader";
 
 //importing sytylesheet
 import "./Subject.css"
@@ -11,8 +12,11 @@ export function AddESCsubject() {
     const [subjectMaxLimit, setsubjectMaxLimit] = useState("");
     const [subjectExcludedbranches, setsubjectExcludedbranches] = useState([]);
     const [isESCSubjectSaved, setisESCSubjectSaved] = useState(false);
+
+    const [loading, setLoading] = useState(false);
     
     const addESCSubject = async ()=>{
+        setLoading(true);
         const data = {
             code: subjectCodeState,
             name: subjectNameState,
@@ -31,6 +35,7 @@ export function AddESCsubject() {
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleAddESC = async (e)=>{
@@ -47,6 +52,9 @@ export function AddESCsubject() {
 
     return (
         <div className='addESCSubject-main-wrapper'>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='addESCSubject-input-feilds-wrapper'>
                 <input 
                     type="text"
@@ -95,8 +103,10 @@ export function AddCyclesubject() {
     const [subjectNameState, setsubjectNameState] = useState("");
     const [subjectMaxLimit, setsubjectMaxLimit] = useState("");
     const [subjectCycleState, setsubjectCycleState] = useState("")
+    const [loading, setLoading] = useState(false);
 
     const addCYCSubject = async ()=>{
+        setLoading(true);
         const data = {
             code: subjectCodeState,
             name: subjectNameState,
@@ -114,6 +124,7 @@ export function AddCyclesubject() {
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleAddCYC = async (e)=>{
@@ -129,6 +140,9 @@ export function AddCyclesubject() {
     }
     return (
         <div className='addCycleSubject-main-wrapper'>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='addCycleSubject-input-feilds-wrapper'>
                 <input 
                     type="text"
@@ -176,8 +190,10 @@ export function AddMDsubject() {
     const [subjectCodeState, setsubjectCodeState] = useState("");
     const [subjectNameState, setsubjectNameState] = useState("");
     const [subjectMandatedbranches, setsubjectMandatedbranches] = useState([]);
+    const [loading, setLoading] = useState(false);
     
     const addMDSubject = async ()=>{
+        setLoading(true);
         const data = {
             code: subjectCodeState,
             name: subjectNameState,
@@ -194,6 +210,7 @@ export function AddMDsubject() {
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleAddMD = async (e)=>{
@@ -210,6 +227,9 @@ export function AddMDsubject() {
 
     return (
         <div className='addESCSubject-main-wrapper'>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='addESCSubject-input-feilds-wrapper'>
                 <input 
                     type="text"
@@ -250,7 +270,7 @@ export function DisplayESCSubject(props){
     const [isEditEnabled, setisEditEnabled] = useState(false);
     const [isChangesSaved, setIsChangesSaved] = useState(false);
     const [isSubjectDeleted, setisSubjectDeleted] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
     //declaring state variables for input feilds
     const [subjectCodeState, setsubjectCodeState] = useState(()=>{
@@ -294,6 +314,7 @@ export function DisplayESCSubject(props){
     }
     //handling subject deletion
     const handleSubjectDeletion = async(e)=>{
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -312,9 +333,11 @@ export function DisplayESCSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleEditSave = async(e)=>{
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -338,9 +361,13 @@ export function DisplayESCSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false)
     }
     return(
         <div className={isSubjectDeleted?"modifySubject-disable-wrapper":'modifySubjects-display-subject-wrapper'}>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='modifySubjects-display-subject-container'>
             
                 <input 
@@ -403,6 +430,7 @@ export function DisplayCycleSubject(props){
     const [isEditEnabled, setisEditEnabled] = useState(false);
     const [isChangesSaved, setIsChangesSaved] = useState(false);
     const [isSubjectDeleted, setisSubjectDeleted] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     //declaring state variables for input feilds
     const [subjectCodeState, setsubjectCodeState] = useState(()=>{
@@ -448,7 +476,7 @@ export function DisplayCycleSubject(props){
     }
     //handling subject deletion
     const handleSubjectDeletion = async(e)=>{
-        e.preventDefault();
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -467,9 +495,11 @@ export function DisplayCycleSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleEditSave = async(e)=>{
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -493,10 +523,14 @@ export function DisplayCycleSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     return (
         <div className={isSubjectDeleted?"modifySubject-disable-wrapper":'modifySubjects-display-subject-wrapper'}>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='modifySubjects-display-subject-container'>
                 <input 
                     className='modifySubjects-display-subject-code'
@@ -558,7 +592,7 @@ export function DisplayMDSubject(props){
     const [isEditEnabled, setisEditEnabled] = useState(false);
     const [isChangesSaved, setIsChangesSaved] = useState(false);
     const [isSubjectDeleted, setisSubjectDeleted] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
     //declaring state variables for input feilds
     const [subjectCodeState, setsubjectCodeState] = useState(()=>{
@@ -594,6 +628,7 @@ export function DisplayMDSubject(props){
     }
     //handling subject deletion
     const handleSubjectDeletion = async(e)=>{
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -611,9 +646,11 @@ export function DisplayMDSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
 
     const handleEditSave = async(e)=>{
+        setLoading(true);
         e.preventDefault();
         const data = {
             code: subjectCodeState,
@@ -636,9 +673,13 @@ export function DisplayMDSubject(props){
         }
         else
             alert(res.data.message);
+        setLoading(false);
     }
     return(
         <div className={isSubjectDeleted?"modifySubject-disable-wrapper":'modifySubjects-display-subject-wrapper'}>
+            {
+                loading && <AdminLoader/>
+            }
             <div className='modifySubjects-display-subject-container'>
             
                 <input 

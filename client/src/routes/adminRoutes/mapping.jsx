@@ -33,6 +33,7 @@ function Mapping() {
     }
     
     const getBranches = async()=>{
+        setisLoading(true);
         const res = await axios.get("/admin/get-branches")
                         .catch((err)=>{
                             console.log(err);
@@ -47,15 +48,14 @@ function Mapping() {
         }else{
             alert("Error in fetching branches. please try again later");
         }
+        setisLoading(false);
     }
 
     useEffect(() => {
-        setisLoading(true);
         async function fetchData(){
             await getBranches();
         }
         fetchData();
-        setisLoading(false);
     }, [])
 
     return (
