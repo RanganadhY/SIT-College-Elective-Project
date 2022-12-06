@@ -9,24 +9,25 @@ const {branchCodes} = require("../utils/constants");
 const studentSchema = new mongoose.Schema({
     Name:{
         type:String,
-        // required:true
+        required:true
     },
     USN:{
         type:String,
-        // required:true,
+        required:true,
         unique:true
     },
     password:{
         type:String,
-        // required:true
+        required:true
     },
     branch:{
         type:String,
-        enum:branchCodes
+        enum:branchCodes,
+        required:true
     },
     academicYear:{
         type:String,
-        // required:true
+        required:true
     },
     semester:{
         type:Number,
@@ -34,8 +35,10 @@ const studentSchema = new mongoose.Schema({
     },
     subEnrolled:[
         {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'Subject',
+            subject:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:'Subject',
+            },
             sem:{
                 type:Number,
                 enum:semesters
@@ -60,12 +63,14 @@ studentSchema.pre("save",async function(next){
 });
 
 studentSchema.pre("updateOne",async function(next){
-    const currentPassword = this;
-    const res = await studentSchema.find(currentPassword.password);
-    console.log(res)
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password,salt);
-    next();
+    try {
+        if (this.password && this.isModified('password')) {
+            this.password = await bcrypt.hash(this.password, 1);
+        }
+        next();
+    }catch (err) {
+        return(err)
+    }
 });
 
 //creating a admin method to verify the password is matched or not

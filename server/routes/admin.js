@@ -1,7 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
-const {viewStudents, viewPasswords, savePasswords, getBranches, saveBranches, getSubjects, addSubjectESC, editSubjectESC, deleteSubjectESC, addSubjectCYC, editSubjectCYC, deleteSubjectCYC, addSubjectMD, editSubjectMD, deleteSubjectMD} = require("../controllers/admin");
+const {
+    viewStudents, 
+    viewPasswords, 
+    savePasswords, 
+    getBranches, 
+    saveBranches, 
+    getSubjects, 
+    addSubjectESC, 
+    editSubjectESC, 
+    deleteSubjectESC, 
+    addSubjectCYC, 
+    editSubjectCYC, 
+    deleteSubjectCYC, 
+    addSubjectMD, 
+    editSubjectMD, 
+    deleteSubjectMD,
+        } = require("../controllers/admin");
 
 router.post("/view-students",viewStudents);
 router.post("/view-passwords",viewPasswords);

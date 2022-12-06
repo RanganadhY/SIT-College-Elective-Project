@@ -385,4 +385,21 @@ const deleteSubjectMD = async(req,res,next)=>{
         res.status(400).send({"message":err.message});
     }
 }
-module.exports = {viewStudents, viewPasswords, savePasswords, getBranches, saveBranches, getSubjects, addSubjectESC, editSubjectESC, deleteSubjectESC, addSubjectCYC, editSubjectCYC, deleteSubjectCYC, addSubjectMD, editSubjectMD, deleteSubjectMD}
+
+module.exports = {
+    viewStudents, 
+    viewPasswords, 
+    savePasswords, 
+    getBranches, 
+    saveBranches, 
+    getSubjects, 
+    addSubjectESC, 
+    editSubjectESC, 
+    deleteSubjectESC, 
+    addSubjectCYC, 
+    editSubjectCYC, 
+    deleteSubjectCYC, 
+    addSubjectMD, 
+    editSubjectMD, 
+    deleteSubjectMD
+}
