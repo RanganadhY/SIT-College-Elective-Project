@@ -15,7 +15,7 @@ import ModifySubjects from './routes/adminRoutes/modifySubjects';
 import Report from "./routes/adminRoutes/report";
 import StudentMngt from "./routes/adminRoutes/studentMngt";
 import SubjectMngt from "./routes/adminRoutes/subjectMngt";
-import VeiwElidgibleSubjects from "./routes/studentRoutes/veiwElidgileSubjects"
+import VeiwElidgibleSubjects from "./routes/studentRoutes/studentProfile"
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
 import EnableDisable from './routes/adminRoutes/enable-disable';
@@ -56,7 +56,7 @@ function App() {
 
           {/* -------Student Protected Routes-------- */}
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>
-            <Route path="/existing-subjects" element={<VeiwElidgibleSubjects/>}/>
+            <Route path="/eligible-subjects" element={<VeiwElidgibleSubjects/>}/>
           </Route>
           {/* -------Page Not Found----- */}
           <Route path='*' element={<PageNotFound/>}/>

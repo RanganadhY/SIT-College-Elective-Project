@@ -35,44 +35,46 @@ function StudentLoginPage() {
         try{
             setisLoading(true);
             if(window.navigator.onLine){
-                const studentLoginresponce = await axios.post("/authentication/student-login",studentEnteredDetails,
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                })
-                .then(async (loginResponse)=>{
-                    setisLoading(false)
-
-                    //storing the auth information {token,role} in the local storage 
-                    //to mainatin a presistent state of logged in user
-                    
-                    window.localStorage.setItem("authToken",loginResponse.data.token);
-
-                    const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
-                    window.localStorage.setItem("authInfo",JSON.stringify(authInfo));
-
-                    //making a request to the students elidigle subjects
-                    var loggedStudentDetail = {
-                        "usn":studentUsn
-                    }
-                    const fetchStudentSubDetail = await axios.post("/student/student-details",loggedStudentDetail,
-                        {
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                "authorization":"Bearer "+String(localStorage.getItem("authToken"))
-                            },
-                            withCredentials: true
-                        }
-                    ).then((res)=>{
-                        
+                await axios.post("/authentication/student-login",studentEnteredDetails,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        withCredentials: true
                     })
-                    
-                    navigate("/existing-subjects");
-                    
-                })
-                .catch((error)=>{
-                    throw(error)
-                })
+                        .then(async (loginResponse)=>{
+                            setisLoading(false)
+
+                            //storing the auth information {token,role} in the local storage 
+                            //to mainatin a presistent state of logged in user
+                            
+                            window.localStorage.setItem("authToken",loginResponse.data.token);
+
+                            const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
+                            window.localStorage.setItem("authInfo",JSON.stringify(authInfo));
+
+                            //making a request to the students elidigle subjects
+                            var loggedStudentDetail = {
+                                "usn":studentUsn
+                            }
+                            await axios.post("/student/student-details",loggedStudentDetail,
+                                {
+                                    headers: { 
+                                        'Content-Type': 'application/json',
+                                        "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                                    },
+                                    withCredentials: true
+                                }
+                            ).then((res)=>{
+                                navigate("/eligible-subjects",{state:{"eligibleSubjects":res.data.eligibleSubjects}})
+                            }).catch((error)=>{
+                                throw(error)
+                            })
+                            
+                            // navigate("/existing-subjects");
+                            
+                        })
+                        .catch((error)=>{
+                            throw(error)
+                        })
             }
             else{
                 seterrorMessage("Please connect to Internet")
