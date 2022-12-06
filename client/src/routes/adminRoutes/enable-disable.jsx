@@ -13,7 +13,7 @@ export default function EnableDisable() {
     
     const handleChange = async(e) => {
         console.log("hi")
-        const res = await axios.post("/admin/set-status", {status: status})
+        const res = await axios.post("/admin/set-status", {status: !status})
                                 .catch((err)=>{
                                     console.log(err);
                                     alert("Something went wrong. Please try again later.");
