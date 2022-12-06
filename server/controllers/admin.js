@@ -128,7 +128,11 @@ const saveBranches = async(req,res,next)=>{
 const getSubjects = async(req,res,next)=>{
     try{
         //find all subjects
-        const subjectData = Subject.find({},{_id:0,createdAt:0,updatedAt:0,__v:0})
+        const subjectData = await Subject.find({},{_id:0,createdAt:0,updatedAt:0,__v:0});
+
+        //send subjects Data as response
+        res.status(200).send({"message":"successfull","data":subjectData});
+
     }catch(err){
         //sending the error message in case something goes wrong
         console.log(err)
@@ -136,4 +140,249 @@ const getSubjects = async(req,res,next)=>{
     }
 }
 
-module.exports = {viewStudents, viewPasswords, savePasswords, getBranches, saveBranches}
+const addSubjectESC = async(req,res,next)=>{
+    try{
+
+        //capturing the details from the body of the request
+        const {code, name, limit, exBranch} = req.body;
+
+        //forming array of branches from the string
+        const exBranchList = exBranch.trim().split(" ");
+
+        //checking if all the supplied branches are valid
+        for(let i=0;i<exBranchList.length;i++){
+            if(!branchCodes.includes(exBranchList[i])){
+                res.status(400).send({"message":"Data not valid"});
+                return
+            }
+        }
+
+        //making a new subject
+        const newSubject = new Subject({
+            name:name,
+            code:code,
+            maxCount:limit,
+            excludedBranches:exBranchList,
+            type:'ESC'
+        });
+
+        //saving the new subject
+        await newSubject.save();
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const editSubjectESC = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, limit, exBranch} = req.body;
+
+        //forming array of branches from the string
+        const exBranchList = exBranch.trim().split(" ");
+        
+        //checking if all the supplied branches are valid
+        for(let i=0;i<exBranchList.length;i++){
+            if(!branchCodes.includes(exBranchList[i])){
+                res.status(400).send({"message":"Data not valid"});
+                return
+            }
+        }
+
+        //updating the subject
+        await Subject.updateOne({code:code},{code:code,name:name,maxCount:limit,excludedBranches:exBranchList},{upsert:true});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const deleteSubjectESC = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, limit, exBranch} = req.body;
+
+        //deleting the subject
+        await Subject.deleteOne({code:code});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const addSubjectCYC = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, limit, cycle} = req.body;
+
+        //checking if cycle is valid
+        if(cycle.trim()!=="physics" && cycle.trim()!=="chemistry"){
+            res.status(400).send({"message":"data not valid"});
+            return
+        }
+
+        //making a new subject
+        const newSubject = new Subject({
+            name:name,
+            code:code,
+            maxCount:limit,
+            cycle:cycle,
+            type:'CYC'
+        });
+
+        //saving the new subject
+        await newSubject.save();
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const editSubjectCYC = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, limit, cycle} = req.body;
+
+        //checking if cycle is valid
+        if(cycle.trim()!=="physics" && cycle.trim()!=="chemistry"){
+            res.status(400).send({"message":"data not valid"});
+            return
+        }
+
+        //updating the subject
+        await Subject.updateOne({code:code},{code:code,name:name,maxCount:limit,cycle:cycle},{upsert:true});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const deleteSubjectCYC = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, limit, cycle} = req.body;
+
+        //deleting the subject
+        await Subject.deleteOne({code:code});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+
+const addSubjectMD = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, mandatedBranch} = req.body;
+
+        //forming array of branches from the string
+        const mdBranchList = mandatedBranch.trim().split(" ");
+        
+        //checking if all the supplied branches are valid
+        for(let i=0;i<mdBranchList.length;i++){
+            if(!branchCodes.includes(mdBranchList[i])){
+                res.status(400).send({"message":"Data not valid"});
+                return
+            }
+        }
+
+        //making a new subject
+        const newSubject = new Subject({
+            name:name,
+            code:code,
+            mandatedBranches:mdBranchList,
+            type:'MD'
+        });
+
+        //saving the new subject
+        await newSubject.save();
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const editSubjectMD = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, mandatedBranch} = req.body;
+
+        //forming array of branches from the string
+        const mdBranchList = mandatedBranch.trim().split(" ");
+        
+        //checking if all the supplied branches are valid
+        for(let i=0;i<mdBranchList.length;i++){
+            if(!branchCodes.includes(mdBranchList[i])){
+                res.status(400).send({"message":"Data not valid"});
+                return
+            }
+        }
+
+        //updating the subject
+        await Subject.updateOne({code:code},{code:code,name:name,mandatedBranches:mdBranchList},{upsert:true});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const deleteSubjectMD = async(req,res,next)=>{
+    try{
+        //capturing the details from the body of the request
+        const {code, name, mdBranches} = req.body;
+
+        //deleting the subject
+        await Subject.deleteOne({code:code});
+
+        //sending back response
+        res.status(200).send({"message":"successfull"})
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+module.exports = {viewStudents, viewPasswords, savePasswords, getBranches, saveBranches, getSubjects, addSubjectESC, editSubjectESC, deleteSubjectESC, addSubjectCYC, editSubjectCYC, deleteSubjectCYC, addSubjectMD, editSubjectMD, deleteSubjectMD}
