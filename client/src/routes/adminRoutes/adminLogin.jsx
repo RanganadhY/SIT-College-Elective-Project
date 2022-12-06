@@ -1,31 +1,71 @@
-import React,{useState,useEffect,useRef} from 'react'
+import React,{useState,useEffect} from 'react'
 import {useNavigate} from "react-router-dom"
 
 //importing the style sheet
 import "../../css/adminCss/adminLogin.css";
+//importing axios
+import axios from "../../axios/axios"
 //importing background image
 import loginIllustration from "../../assets/images/undraw_terms_re_6ak4.svg"
+
+//importing loader
+import {AdminLoader} from "../../components/loading component/loader";
 
 function AdminLogin() {
     const navigate = useNavigate();
     // const userNameRef = useRef();
 
-    // const [adminUserName, setadminUserName] = useState("");
-    // const [adminPassword, setadminPassword] = useState("")
+    const [adminEmail, setadminEmail] = useState("");
+    const [adminPassword, setadminPassword] = useState("");
 
-    // useEffect(()=>{
-    //     userNameRef.current.focus()
-    // },[]);
-    // const handleLoginClick = async(e)=>{
-    //     e.preventDefault();
-    //     navigate("/student-management")
-    // }
+    const [errorMessage, seterrorMessage] = useState("");
+    const [isLoading, setisLoading] = useState(false);
+
+    useEffect(()=>{
+        seterrorMessage("")
+    },[adminEmail,adminPassword]);
+
     const handleAdminLogin = async(e)=>{
         e.preventDefault();
-        navigate("/student-management")
+        var adminEnteredDetails = {
+            'email':adminEmail,
+            "password":adminPassword
+        }
+        try{
+            setisLoading(true);
+            if(window.navigator.onLine){
+                const adminLoginresponce = await axios.post("/authentication/admin-login",adminEnteredDetails,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                })
+                .then((loginResponse)=>{
+                    setisLoading(false)
+                    const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
+                    window.localStorage.setItem("authInfo",JSON.stringify(authInfo))
+                    navigate("/student-management");
+                    
+                })
+                .catch((error)=>{
+                    throw(error)
+                })
+            }
+            else{
+                seterrorMessage("Please connect to Internet")
+            }
+        }catch(error){
+                setisLoading(false)
+                seterrorMessage(error.response.data.message)
+        }
+        finally{
+            setisLoading(false)
+        }
     }
     return (
         <>
+            {
+                isLoading&&<AdminLoader/>
+            }
             <div className="adminloginPage-main-wrapper">
                 <div className="adminloginPage-main-container">
                     <div className="adminloginPage-col0-container">
@@ -43,12 +83,21 @@ function AdminLogin() {
                                     </div>
                                     
                                     <div className="adminloginPage-feilds-wrapper">
-                                        <input type="text" />
+                                        <input 
+                                            type="text"
+                                            required="true"
+                                            value={adminEmail}
+                                            onChange={(e)=>setadminEmail(e.target.value)}
+                                            />
                                         <span>User Name</span>
                                     </div>
                                     <div className="adminloginPage-feilds-wrapper">
                                         <input 
-                                            type="password" />
+                                            type="password"
+                                            required="true"
+                                            value={adminPassword}
+                                            onChange={(e)=>setadminPassword(e.target.value)}
+                                            />
                                         <span>Password</span>
                                     </div>
                                     
@@ -58,8 +107,8 @@ function AdminLogin() {
                                         </div>
                                         
                                     </div>
-                                    <div className="adminloginPage-login-result-container">
-                                        {/* <p>Wrong Details</p> */}
+                                    <div className={errorMessage?"loginPage-login-result-container":".loginPage-login-result-display-none-container"}>
+                                        {errorMessage&&<p className=''>{errorMessage}</p>}
                                     </div>
                                 </div>
                             </div>

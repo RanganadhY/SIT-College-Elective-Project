@@ -45,7 +45,7 @@ const studentSchema = new mongoose.Schema({
             }
         }
     ],
-    studentRole:{
+    role:{
         type:Number,
         default:780907276
     }

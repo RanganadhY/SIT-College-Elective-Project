@@ -37,9 +37,10 @@ function App() {
       {/* Routes for all the client panel to route through whole client panel */}
       <Routes>
         
-
-          {/* <Route element={<AuthRoute allowedRoles={[ROLES.Admin]}/>}> */}
-            <Route path='/admin-login' element={<AdminLogin/>}/>
+          <Route path='/admin-login' element={<AdminLogin/>}/>
+          <Route path='/' element={<StudentLogin/>}/>
+          <Route element={<AuthRoute allowedRoles={[ROLES.Admin]}/>}>
+            
             <Route path='/mapping' element={<Mapping/>}/>
             <Route path='/modify-subjects' element={<ModifySubjects/>}/>
             <Route path='/student-management' element={<StudentMngt/>}/>
@@ -47,12 +48,10 @@ function App() {
             <Route path='/report' element={<Report/>}/>
             <Route path='/view-students' element={<ViewStudents/>}/>
             <Route path='/view-passwords' element={<ViewPasswords/>}/>
-          {/* </Route> */}
+          </Route>
           
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>
-            <Route path='/' element={<StudentLogin/>}/>
             <Route path="/existing-subjects" element={<VeiwElidgibleSubjects/>}/>
-
           </Route>
 
           <Route path='*' element={<PageNotFound/>}/>

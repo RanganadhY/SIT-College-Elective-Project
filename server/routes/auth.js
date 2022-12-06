@@ -8,4 +8,8 @@ const authentication = require("../controllers/auth controllers/authController")
 router.post("/student-login",authentication.studentLogin);
 router.post("/student-register",authentication.studentRegister);
 
+//routes for admin authentication
+router.post("/admin-login",authentication.adminLogin);
+router.post("/admin-register",authentication.adminRegister);
+
 module.exports = router
