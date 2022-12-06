@@ -42,9 +42,31 @@ function StudentLoginPage() {
                 })
                 .then(async (loginResponse)=>{
                     setisLoading(false)
+
+                    //storing the auth information {token,role} in the local storage 
+                    //to mainatin a presistent state of logged in user
+                    
+                    window.localStorage.setItem("authToken",loginResponse.data.token);
+
                     const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
                     window.localStorage.setItem("authInfo",JSON.stringify(authInfo));
-                    const fetchStudentSubDetail = await axios.get("/student/student-details");
+
+                    //making a request to the students elidigle subjects
+                    var loggedStudentDetail = {
+                        "usn":studentUsn
+                    }
+                    const fetchStudentSubDetail = await axios.post("/student/student-details",loggedStudentDetail,
+                        {
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                            },
+                            withCredentials: true
+                        }
+                    ).then((res)=>{
+                        
+                    })
+                    
                     navigate("/existing-subjects");
                     
                 })
