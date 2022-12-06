@@ -18,7 +18,7 @@ import SubjectMngt from "./routes/adminRoutes/subjectMngt";
 import VeiwElidgibleSubjects from "./routes/studentRoutes/veiwElidgileSubjects"
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
-
+import EnableDisable from './routes/adminRoutes/enable-disable';
 
 
 
@@ -47,6 +47,7 @@ function App() {
             <Route path='/report' element={<Report/>}/>
             <Route path='/view-students' element={<ViewStudents/>}/>
             <Route path='/view-passwords' element={<ViewPasswords/>}/>
+            <Route path="/selection-enable-disable" element={<EnableDisable/>}/>
           {/* </Route> */}
           
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>

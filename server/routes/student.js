@@ -5,6 +5,6 @@ const {
     getStudentDetails
     } = require("../controllers/student");
 
-router.get("/student-details",getStudentDetails);
+router.post("/student-details",getStudentDetails);
 
 module.exports = router

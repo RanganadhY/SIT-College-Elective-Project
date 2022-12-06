@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema({
-    email:{
+    username:{
         type:String,
         required:true
     },
     password:{
         type:String,
         required:true
+    },
+    subjectSelection:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true});
 

@@ -17,6 +17,8 @@ const {
     addSubjectMD, 
     editSubjectMD, 
     deleteSubjectMD,
+    getStatus,
+    setStatus
         } = require("../controllers/admin");
 
 router.post("/view-students",viewStudents);
@@ -34,5 +36,7 @@ router.post("/delete-subject/cyc",deleteSubjectCYC);
 router.post("/add-subject/md",addSubjectMD);
 router.post("/edit-subject/md",editSubjectMD);
 router.post("/delete-subject/md",deleteSubjectMD);
+router.get("/get-status",getStatus);
+router.post("/set-status",setStatus);
 
 module.exports = router;
