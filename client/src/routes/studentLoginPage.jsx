@@ -7,15 +7,13 @@ import loginIllustration from "../assets/images/undraw_mobile_login_re_9ntv.svg"
 //importing axios
 import axios from "../axios/axios"
 //importing loader
-import Loader from "../components/loading component/loader";
+import {StudentLoader,AdminLoader} from "../components/loading component/loader";
 
-//importing auth hook
-import useAuth from '../hooks/useAuth';
 
 function StudentLoginPage() {
 
-    //auth hook
-    const {auth,setAuth} = useAuth();
+    //use location hook
+    
 
     const [studentUsn, setstudentUsn] = useState("");
     const [studentPassword, setstudentPassword] = useState("");
@@ -42,10 +40,11 @@ function StudentLoginPage() {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 })
-                .then((loginResponse)=>{
+                .then(async (loginResponse)=>{
                     setisLoading(false)
                     const authInfo = {"role":loginResponse.data.roles,"token":loginResponse.data.token};
-                    window.localStorage.setItem("authInfo",JSON.stringify(authInfo))
+                    window.localStorage.setItem("authInfo",JSON.stringify(authInfo));
+                    const fetchStudentSubDetail = await axios.get("/student/student-details");
                     navigate("/existing-subjects");
                     
                 })
@@ -77,7 +76,7 @@ function StudentLoginPage() {
     return (
         <>
             {
-                isLoading&&<Loader/>
+                isLoading&&<StudentLoader/>
             }
             <div className="loginPage-main-wrapper">
                 <div className="loginPage-main-container">
