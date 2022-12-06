@@ -414,6 +414,17 @@ const setStatus = async(req,res,next)=>{
     res.status(200).send({"message":"successfull"});
 }
 
+const getSubjectsStatus = async (req,res,next)=>{
+    //get the codes from body
+    const {eligibleSubjectCodes} = req.body;
+    // eligibleSubjectCodes = JSON.parse(eligibleSubjectCodes);
+    //get the subjects enrolled count from the database
+
+    const subjects = await Subject.find({code:{$in:eligibleSubjectCodes}},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
+
+    //send the response
+    res.status(200).send({"message":"successfull","subjectsCount":subjects});
+}
 module.exports = {
     viewStudents, 
     viewPasswords, 
@@ -431,5 +442,6 @@ module.exports = {
     editSubjectMD, 
     deleteSubjectMD,
     getStatus,
-    setStatus
+    setStatus,
+    getSubjectsStatus
 }
