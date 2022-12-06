@@ -8,14 +8,17 @@ import "../../components/cycleMapping/cycleMapping.css"
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
 
+import { AdminLoader } from '../../components/loading component/loader';
+
 
 function Mapping() {
     const [branchesList, setBranchesList] = useState([]);
+    const [isLoading, setisLoading] = useState(true);
 
     const tempList = branchesList;
 
     const handleSave = async()=>{
-        console.log(tempList)
+        setisLoading(true);
         const res = await axios.post("/admin/save-branches", tempList)
                                 .catch((err)=>{
                                     console.log(err);
@@ -26,6 +29,7 @@ function Mapping() {
         }else{
             alert("Error in updating branches. please try again later");
         }
+        setisLoading(false);
     }
     
     const getBranches = async()=>{
@@ -46,15 +50,20 @@ function Mapping() {
     }
 
     useEffect(() => {
+        setisLoading(true);
         async function fetchData(){
             await getBranches();
         }
         fetchData();
+        setisLoading(false);
     }, [])
 
     return (
         <>
             <AdminNavbar/>
+            {
+                isLoading&&<AdminLoader/>
+            }
             <div className="mapping-main-wrapper">
                 <div className="mapping-main-container">
                     <div className="mapping-lables-conatiner">

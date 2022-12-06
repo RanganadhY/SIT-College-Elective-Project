@@ -7,6 +7,7 @@ import "../../css/adminCss/studentMngt.css"
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
 
+import { AdminLoader } from '../../components/loading component/loader';
 
 function StudentMngt() {
 
@@ -16,6 +17,7 @@ function StudentMngt() {
     const [yearEnd, setYearEnd] = useState(0);
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
+    const [isLoading, setisLoading] = useState(false);
 
     const handleViewStudents = () => {
         const data = {
@@ -68,6 +70,7 @@ function StudentMngt() {
     }
 
     const handleSubmit =async (e)=>{
+        setisLoading(true);
         const form = e.currentTarget;
         if(form.checkValidity() === false){
             e.preventDefault();
@@ -81,10 +84,14 @@ function StudentMngt() {
                 handleViewPasswords();
             }
         }
+        setisLoading(false);
     }
     return (
         <>
             <AdminNavbar/>
+            {
+                isLoading && <AdminLoader/>
+            }
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
                     <form action="" onSubmit={handleSubmit} className='student-mngt-form-container'>

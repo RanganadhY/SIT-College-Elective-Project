@@ -7,6 +7,7 @@ import "../../css/adminCss/subjectMgnt.css"
 
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
+import { AdminLoader } from '../../components/loading component/loader';
 
 function SubjectMngt() {
 
@@ -15,6 +16,7 @@ function SubjectMngt() {
     const [yearStart, setYearStart] = useState(0);
     const [yearEnd, setYearEnd] = useState(0);
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
+    const [isLoading, setisLoading] = useState(false);
 
     const handleSubjMgntModifySubjects = async()=>{
         const data = {

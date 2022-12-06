@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar';
+import { AdminLoader } from '../../components/loading component/loader';
 import axios from "../../axios/axios";
 
 //import css
@@ -10,14 +11,16 @@ import "../../css/adminCss/enableDisable.css";
 export default function EnableDisable() {
 
     const [status, setStatus] = useState();
+    const [isLoading, setisLoading] = useState(true);
     
     const handleChange = async(e) => {
-        console.log("hi")
+        setisLoading(true);
         const res = await axios.post("/admin/set-status", {status: !status})
                                 .catch((err)=>{
                                     console.log(err);
                                     alert("Something went wrong. Please try again later.");
                                 });
+        setisLoading(false);
         if(res.data){
             if(res.data.message === "successfull"){
                 alert("Successfully updated the status");
@@ -42,16 +45,22 @@ export default function EnableDisable() {
     }
 
     useEffect(()=>{
+        setisLoading(true);
         async function fetchStatus(){
             await getSubjectSelectionStatus();
         }
         fetchStatus();
+        setisLoading(false);
     }, [])
 
     return (
         <>
             <AdminNavbar/>
-            <div className="switch-main-container">
+            {
+                isLoading&&<AdminLoader/>
+            }
+            {
+                !isLoading && <div className="switch-main-container">
                 <div className="container">
                     <span className="heading">
                         Subject Selection
@@ -65,6 +74,7 @@ export default function EnableDisable() {
                     </div>
                 </div>
             </div>
+            }
         </>
     )
 }
