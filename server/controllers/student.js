@@ -61,7 +61,7 @@ const getStudentDetails = async(req,res,next) =>{
         const availableCYCCourses = await Subject.find({_id:{$nin: studiedSubjectsIds}, type:"CYC", cycle:cycle},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
 
         //send the applicable ESC and CYC courses of the student
-        res.send({"message":"successfull","eligibleSubjects":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}],"studentProfile":{"name":studentDetails[0].Name,"branch":branchDetails[0].name,"cycle":branchDetails[0].cycle,"semester":studentDetails[0].semester}});
+        res.send({"message":"successfull","eligibleSubjects":[{"esc":availableESCCourses}, {"cyc":availableCYCCourses}],"studentProfile":{"name":studentDetails[0].Name,"branch":branchDetails[0].name,"cycle":branchDetails[0].cycle,"semester":studentDetails[0].semester,"subjectSelection":studentDetails[0].selectedSems[studentDetails[0].semester-1]}});
     }catch(err){
         //sending the error message in case something goes wrong
         console.log(err)
@@ -84,6 +84,9 @@ const optSubject = async(req,res,next) =>{
             return;
         }
 
+        if(studentDetails[0].selectedSems[studentDetails[0].semester-1][0] === true && studentDetails[0].selectedSems[studentDetails[0].semester-1][1] === true){
+            res.status(200).send({"message":"You have already registered for the subjects","code":607});
+        }
         //find cycle from branch of the student
         const branchDetails = await Branch.find({code:studentDetails[0].branch});
         const cycle = branchDetails[0].cycle;
@@ -131,8 +134,16 @@ const optSubject = async(req,res,next) =>{
                 res.status(200).send({"message":"Subject full","code":606});
                 return;
             }
-            await Subject.updateOne({code:subjectCode},{enrolledCount:1+subjectDetails[0].enrolledCount});
             studentDetails[0].subEnrolled.push({subject:subjectDetails[0]._id,sem:studentDetails[0].sem});
+            if(studentDetails[0].selectedSems[studentDetails[0].semester-1][0] === false)
+                studentDetails[0].selectedSems[studentDetails[0].semester-1][0] = true;
+            else if(studentDetails[0].selectedSems[studentDetails[0].semester-1][1] === false)
+                studentDetails[0].selectedSems[studentDetails[0].semester-1][1] = true;
+            // else{
+            //     res.status(200).send({"message":"You have already registered for the subjects","code":607});
+            //     return;
+            // }
+            await Subject.updateOne({code:subjectCode},{enrolledCount:1+subjectDetails[0].enrolledCount});
             await studentDetails[0].save().catch(async(err) => {
                 console.log(err);
                 await Subject.updateOne({code:subjectCode},{$inc:{enrolledCount:-1}});
@@ -146,7 +157,7 @@ const optSubject = async(req,res,next) =>{
                 return;
             }else{
                 //sending back success message
-                res.status(200).send({"message":"Successfully registered","code":607});
+                res.status(200).send({"message":"Successfully registered","code":608});
                 return;
             }
         })
