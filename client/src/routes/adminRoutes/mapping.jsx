@@ -21,7 +21,7 @@ function Mapping() {
         setisLoading(true);
         const res = await axios.post("/admin/save-branches", tempList)
                                 .catch((err)=>{
-                                    setisLoading(true);
+                                    setisLoading(false);
                                     console.log(err);
                                     alert("Error in fetching branches. please try again later");
                                 });
@@ -37,7 +37,7 @@ function Mapping() {
         setisLoading(true);
         const res = await axios.get("/admin/get-branches")
                         .catch((err)=>{
-                            setisLoading(true);
+                            setisLoading(false);
                             console.log(err);
                             alert("Error in fetching branches. please try again later");
                         });
