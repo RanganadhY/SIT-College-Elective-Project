@@ -173,7 +173,7 @@ function OptingSubjects() {
                                 >
                                 
                                 <option  hidden={true} value="NA">-SELECT-</option>
-                                {state&&state.possibleESCSubsTotake.map((key,index)=>{
+                                {state.possibleESCSubsTotake.map((key,index)=>{
                                     return(
                                         <option 
                                             value={state.possibleESCSubsTotake[index].code}>
@@ -205,7 +205,7 @@ function OptingSubjects() {
                                 onChange={(e)=>setelectiveSubState(e.target.value)}
                                 >
                                 <option hidden={true} value="NA">-SELECT-</option>
-                                {state&&state.possibleSlectiveSubsTotake.map((key,index)=>{
+                                {state.possibleSlectiveSubsTotake.map((key,index)=>{
                                     return(
                                         <option 
                                             value={state.possibleSlectiveSubsTotake[index].code}>
