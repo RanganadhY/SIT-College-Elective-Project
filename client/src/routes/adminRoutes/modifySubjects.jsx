@@ -52,6 +52,7 @@ function ModifySubjects() {
         setLoading(true);
         const res = await axios.get("/admin/get-subjects")
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in fetching subjects. please try again later");
                                 setLoading(false);

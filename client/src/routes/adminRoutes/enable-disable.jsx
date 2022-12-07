@@ -19,6 +19,7 @@ export default function EnableDisable() {
         setisLoading(true);
         const res = await axios.post("/admin/set-status", {status: !status})
                                 .catch((err)=>{
+                                    setisLoading(true);
                                     console.log(err);
                                     alert("Something went wrong. Please try again later.");
                                 });

@@ -4,6 +4,7 @@ const Subject = require("../models/subject");
 const Admin = require("../models/admin");
 
 var AsyncLock = require('async-lock');
+const { exists } = require("../models/admin");
 var lock = new AsyncLock();
 
 const getStudentDetails = async(req,res,next) =>{
@@ -137,10 +138,11 @@ const optSubject = async(req,res,next) =>{
         }
 
         //find the subject details from the subject code and check count and update
-        lock.acquire('subject', async function() {
+        await lock.acquire('subject', async function() {
             if(subjectDetails[0].enrolledCount >= subjectDetails[0].maxCount){  
-                res.status(200).send({"message":"Subject full","code":606});
-                return;
+                // res.status(200).send({"message":"Subject full","code":606});
+                // return;
+                throw({"message":"Subject full","code":606});
             }
             studentDetails[0].subEnrolled.push({subject:subjectDetails[0]._id,sem:studentDetails[0].sem});
             if(studentDetails[0].selectedSems[studentDetails[0].semester-1][0] === false)
@@ -171,8 +173,11 @@ const optSubject = async(req,res,next) =>{
         })
     }catch(err){
         //sending the error message in case something goes wrong
-        console.log(err);
-        res.status(400).send({"message":err.message});
+        if(err.code === 606){
+            res.status(200).send({"message":err.message,"code":606});
+        }else
+            console.log(err);
+            res.status(400).send({"message":err.message});
     }
 }
 

@@ -9,7 +9,7 @@ import AdminNavbar from '../../components/adminNavbar/adminNavbar'
 
 import { AdminLoader } from '../../components/loading component/loader';
 
-function StudentMngt() {
+function ReportGeneration() {
 
     const navigate = useNavigate();
 
@@ -17,62 +17,33 @@ function StudentMngt() {
     const [yearEnd, setYearEnd] = useState(0);
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
-    const [isLoading, setisLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleViewStudents = () => {
-        setisLoading(true);
-        const data = {
-            yearStart: yearStart,
-            yearEnd: yearEnd,
-            branch: branchOptionState,
-            semester: parseInt(semisterOptionState)
-        }
-        axios.post("/admin/view-students", data)
-        .then((res) => {
+    const getReportData = async()=>{
+        setLoading(true);
+        const res = await axios.post("/admin/generate-report",{
+                "academinYear":String(String(yearStart) + "-" + String(yearEnd).slice(2)),
+                "semester":parseInt(semisterOptionState),
+                "branchCode":branchOptionState
+            })
+            .catch((err)=>{
+                setLoading(false);
+                console.log(err);
+                alert("Something went wrong. Please try again later");
+            });
+        if(res.data){
+            console.log(res.data);
             if(res.data.message==="successfull"){
-                if(res.data.data.length===0){
-                    alert("No students found");
+                if(res.data.reportData.length===0){
+                    alert("No data to show");
                 }else{
-                    navigate("/view-students", {state: {data:res.data.data, academicYear:res.data.academicYear, branch:res.data.branch, semester:res.data.semester}});
+                    navigate("/report",{state:{"reportData":res.data.reportData}});
                 }
+            }else{
+                alert("Something went wrong. Please try again");
             }
-            else
-                alert(res.data.message);
-        })
-        .catch((err) => {
-            setisLoading(true);
-            console.log(err);
-            alert("something went wrong. Please try again later");
-        });
-        setisLoading(false);
-    }
-
-    const handleViewPasswords = () =>{
-        setisLoading(true);
-        const data = {
-            yearStart: yearStart,
-            yearEnd: yearEnd,
-            branch: branchOptionState,
-            semester: parseInt(semisterOptionState)
         }
-        axios.post("/admin/view-passwords", data)
-        .then((res) => {
-            if(res.data.message==="successfull"){
-                if(res.data.data.length===0){
-                    alert("No students found");
-                }else{
-                    navigate("/view-passwords", {state: {data:res.data.data}});
-                }
-            }
-            else
-                alert(res.data.message);
-        })
-        .catch((err) => {
-            setisLoading(true);
-            console.log(err);
-            alert("something went wrong. Please try again later");
-        })
-        setisLoading(false);
+        setLoading(false);
     }
 
     const handleSubmit =async (e)=>{
@@ -83,18 +54,14 @@ function StudentMngt() {
         }else{
             e.preventDefault();
             e.stopPropagation();
-            if(e.nativeEvent.submitter.value==="students"){
-                handleViewStudents();
-            }else if(e.nativeEvent.submitter.value==="passwords"){
-                handleViewPasswords();
-            }
+            getReportData();
         }
     }
     return (
         <>
             <AdminNavbar/>
             {
-                isLoading&&<AdminLoader/>
+                loading&&<AdminLoader/>
             }
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
@@ -157,8 +124,7 @@ function StudentMngt() {
                             </select>
                         </div>
                         <div className="student-mngt-button-actions">
-                            <button type='submit' onClick={(e)=>e.target.value="students"}>View Students</button>
-                            <button type='submit' onClick={(e)=>e.target.value="passwords"}>View Passwords</button>
+                            <button type='submit'>View Report</button>
                         </div>
                     </form>
                     
@@ -168,4 +134,4 @@ function StudentMngt() {
     )
 }
 
-export default StudentMngt
+export default ReportGeneration
