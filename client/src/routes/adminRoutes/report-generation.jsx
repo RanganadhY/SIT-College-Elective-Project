@@ -120,7 +120,7 @@ function ReportGeneration() {
                                 <option hidden selected value="">--Select--</option>
                                 <option value="1">&#8544;</option>
                                 <option value="2">&#8545;</option>
-                                <option value="3">&#8546;</option>
+                                {/* <option value="3">&#8546;</option> */}
                             </select>
                         </div>
                         <div className="student-mngt-button-actions">

@@ -40,8 +40,7 @@ export default function EnableDisable() {
             {
                 isLoading&&<AdminLoader/>
             }
-            {
-                !isLoading && <div className="switch-main-container">
+            <div className="main-container">
                 <div className="container">
                     <span className="heading">
                         Subject Selection
@@ -55,7 +54,6 @@ export default function EnableDisable() {
                     </div>
                 </div>
             </div>
-            }
         </>
     )
 }
