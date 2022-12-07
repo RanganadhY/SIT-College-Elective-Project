@@ -388,42 +388,94 @@ const deleteSubjectMD = async(req,res,next)=>{
 
 const getStatus = async(req,res,next)=>{
 
-    //get the status from admin model
-    const adminDetails = await Admin.find({});
+    try{
+        //get the status from admin model
+        const adminDetails = await Admin.find({});
 
-    //if no admin is found
-    if(adminDetails.length===0){
-        res.status(400).send({"message":"no admin found"});
-        return
+        //if no admin is found
+        if(adminDetails.length===0){
+            res.status(400).send({"message":"no admin found"});
+            return
+        }
+        const status = adminDetails[0].subjectSelection;
+
+        //send the status
+        res.status(200).send({"message":"successfull","status":status});
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
     }
-    const status = adminDetails[0].subjectSelection;
-
-    //send the status
-    res.status(200).send({"message":"successfull","status":status});
 }
 
 const setStatus = async(req,res,next)=>{
 
-    //get the status value from req
-    const {status} = req.body;
+    try{
+        //get the status value from req
+        const {status} = req.body;
 
-    //update the status
-    await Admin.updateMany({},{subjectSelection:status});
+        //update the status
+        await Admin.updateMany({},{subjectSelection:status});
 
-    //send the response
-    res.status(200).send({"message":"successfull"});
+        //send the response
+        res.status(200).send({"message":"successfull"});
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
 }
 
 const getSubjectsStatus = async (req,res,next)=>{
-    //get the codes from body
-    const {eligibleSubjectCodes} = req.body;
-    // eligibleSubjectCodes = JSON.parse(eligibleSubjectCodes);
-    //get the subjects enrolled count from the database
 
-    const subjects = await Subject.find({code:{$in:eligibleSubjectCodes}},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
+    try{
+        //get the codes from body
+        const {eligibleSubjectCodes} = req.body;
+        // eligibleSubjectCodes = JSON.parse(eligibleSubjectCodes);
+        //get the subjects enrolled count from the database
 
-    //send the response
-    res.status(200).send({"message":"successfull","subjectsCount":subjects});
+        const subjects = await Subject.find({code:{$in:eligibleSubjectCodes}},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0});
+
+        //send the response
+        res.status(200).send({"message":"successfull","subjectsCount":subjects});
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
+
+const generateReport = async(req,res,next)=>{
+    try{
+        //get student data from the database
+        const studentDetails = await Student.find({}).populate("subEnrolled.subject").sort({USN:1});
+
+        //consolidate the data
+        let reportData = [];
+        for(let i=0; i<studentDetails.length; i++){
+            const branchDetails = await Branch.find({code:studentDetails[i].branch});
+            const mandatedSubs = await Subject.find({mandatedBranches:{"$in":[studentDetails[i].branch]},type:"MD"}).select("name");
+            let studentObj = {
+                "usn":studentDetails[i].USN,
+                "name":studentDetails[i].Name,
+                "branch":studentDetails[i].branch,
+                "semester":studentDetails[i].semester,
+                "academicYear":studentDetails[i].academicYear,
+                "cycle": branchDetails[0].cycle,
+                "ESC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="ESC").map((sub)=>sub.subject.name).join(","),
+                "CYC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="CYC").map((sub)=>sub.subject.name).join(","),
+                "MD":mandatedSubs.map((sub)=>sub.name).join(",")
+            };
+            reportData.push(studentObj);
+        }
+        res.send({"message":"successfull","reportData":reportData});
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
 }
 module.exports = {
     viewStudents, 
@@ -443,5 +495,6 @@ module.exports = {
     deleteSubjectMD,
     getStatus,
     setStatus,
-    getSubjectsStatus
+    getSubjectsStatus,
+    generateReport
 }
