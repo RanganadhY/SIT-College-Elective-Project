@@ -448,14 +448,25 @@ const getSubjectsStatus = async (req,res,next)=>{
 
 const generateReport = async(req,res,next)=>{
     try{
+        const {academinYear, semester, branchCode} = req.body;
+        if(
+            !branchCode ||
+            !(branchCodes.includes(branchCode)) ||
+            !semester ||
+            !(semesters.includes(semester)) ||
+            !academinYear
+        )
+        {
+            res.status(400).send({"message":"data not valid"})
+            return;
+        }
         //get student data from the database
-        const studentDetails = await Student.find({}).populate("subEnrolled.subject").sort({USN:1});
-
+        const studentDetails = await Student.find({branch:branchCode, academicYear:academinYear, semester:semester}).populate("subEnrolled.subject").sort({USN:1});
+        //get branch details
+        const branchDetails = await Branch.find({code:branchCode});
         //consolidate the data
         let reportData = [];
         for(let i=0; i<studentDetails.length; i++){
-            const branchDetails = await Branch.find({code:studentDetails[i].branch});
-            const mandatedSubs = await Subject.find({mandatedBranches:{"$in":[studentDetails[i].branch]},type:"MD"}).select("name");
             let studentObj = {
                 "usn":studentDetails[i].USN,
                 "name":studentDetails[i].Name,
@@ -464,8 +475,7 @@ const generateReport = async(req,res,next)=>{
                 "academicYear":studentDetails[i].academicYear,
                 "cycle": branchDetails[0].cycle,
                 "ESC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="ESC").map((sub)=>sub.subject.name).join(","),
-                "CYC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="CYC").map((sub)=>sub.subject.name).join(","),
-                "MD":mandatedSubs.map((sub)=>sub.name).join(",")
+                // "CYC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="CYC").map((sub)=>sub.subject.name).join(","),
             };
             reportData.push(studentObj);
         }

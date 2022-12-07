@@ -173,10 +173,10 @@ const optSubject = async(req,res,next) =>{
         })
     }catch(err){
         //sending the error message in case something goes wrong
-        console.log(err);
         if(err.code === 606){
             res.status(200).send({"message":err.message,"code":606});
         }else
+            console.log(err);
             res.status(400).send({"message":err.message});
     }
 }

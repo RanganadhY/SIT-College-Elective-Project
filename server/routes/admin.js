@@ -41,6 +41,6 @@ router.post("/delete-subject/md",deleteSubjectMD);
 router.get("/get-status",getStatus);
 router.post("/set-status",setStatus);
 router.post("/get-subjects-status",getSubjectsStatus);
-router.get("/generate-report",generateReport)
+router.post("/generate-report",generateReport)
 
 module.exports = router;

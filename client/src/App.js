@@ -21,6 +21,7 @@ import VeiwOptedSubjects from './routes/studentRoutes/veiwOptedSubjects';
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
 import EnableDisable from './routes/adminRoutes/enable-disable';
+import ReportGen from "./routes/adminRoutes/report-generation.jsx";
 
 
 
@@ -54,6 +55,7 @@ function App() {
             <Route path='/view-students' element={<ViewStudents/>}/>
             <Route path='/view-passwords' element={<ViewPasswords/>}/>
             <Route path="/selection-enable-disable" element={<EnableDisable/>}/>
+            <Route path="/report-generation" element={<ReportGen/>} />
           </Route>
 
           {/* -------Student Protected Routes-------- */}

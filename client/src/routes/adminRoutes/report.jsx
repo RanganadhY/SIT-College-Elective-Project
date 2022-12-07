@@ -56,11 +56,7 @@ function Report() {
             {
                 Header: "Optional Course",
                 accessor: "CYC",
-            },
-            {
-                Header: "Mandatory Courses",
-                accessor: "MD",
-            },
+            }
         ],
         []
     );
@@ -84,7 +80,7 @@ function Report() {
         {
             columns,
             data: tableData,
-            initialState: { pageSize: 10 }
+            initialState: { pageSize: 50 }
         },
         (hooks) => {
             hooks.visibleColumns.push((columns) => {
