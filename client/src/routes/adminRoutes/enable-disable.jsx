@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
+import {useLocation} from "react-router-dom";
 //importing navbar
 import AdminNavbar from '../../components/adminNavbar/adminNavbar';
 import { AdminLoader } from '../../components/loading component/loader';
@@ -10,8 +10,10 @@ import "../../css/adminCss/enableDisable.css";
 
 export default function EnableDisable() {
 
-    const [status, setStatus] = useState();
-    const [isLoading, setisLoading] = useState(true);
+    const data = useLocation().state;
+
+    const [status, setStatus] = useState(data.status);
+    const [isLoading, setisLoading] = useState(false);
     
     const handleChange = async(e) => {
         setisLoading(true);
@@ -20,7 +22,6 @@ export default function EnableDisable() {
                                     console.log(err);
                                     alert("Something went wrong. Please try again later.");
                                 });
-        setisLoading(false);
         if(res.data){
             if(res.data.message === "successfull"){
                 alert("Successfully updated the status");
@@ -29,29 +30,8 @@ export default function EnableDisable() {
                 alert("Something went wrong. Please try again later.");
             }
         }
-    }
-
-    const getSubjectSelectionStatus = async() => {
-        const res = await axios.get("/admin/get-status")
-                                .catch((err)=>{
-                                    console.log(err);
-                                    alert("something went wrong. Please try again later.");
-                                });
-        if(res.data){
-            if(res.data.message === "successfull"){
-                setStatus(res.data.status);
-            }
-        }
-    }
-
-    useEffect(()=>{
-        setisLoading(true);
-        async function fetchStatus(){
-            await getSubjectSelectionStatus();
-        }
-        fetchStatus();
         setisLoading(false);
-    }, [])
+    }
 
     return (
         <>

@@ -403,7 +403,7 @@ const getStatus = async(req,res,next)=>{
 }
 
 const setStatus = async(req,res,next)=>{
-    
+
     //get the status value from req
     const {status} = req.body;
 

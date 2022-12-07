@@ -43,12 +43,13 @@
     animation-timing-function: ease-out;
 }
 
-.adminnavbar-navlink-list li a{
+.adminnavbar-navlink-list li a,.adminnavbar-navlink-list li{
     text-decoration: none;
     font-size: 2rem;
     color:aliceblue;
     letter-spacing: 0.09rem;
     position: relative;
+    cursor: pointer;
 }
 .adminnavbar-navlink-list li a.active::after{
     position: absolute;
