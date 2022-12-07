@@ -25,6 +25,7 @@ export function AddESCsubject() {
         }
         const res = await axios.post("/admin/add-subject/esc", data)
                             .catch((err)=>{
+                            setLoading(true);
                                 console.log(err);
                                 alert("Error in adding subject. please try again later");
                             });
@@ -115,6 +116,7 @@ export function AddCyclesubject() {
         }
         const res = await axios.post("/admin/add-subject/cyc", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in adding subject. please try again later");
                             });
@@ -201,6 +203,7 @@ export function AddMDsubject() {
         }
         const res = await axios.post("/admin/add-subject/md", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in adding subject. please try again later");
                             });
@@ -324,6 +327,7 @@ export function DisplayESCSubject(props){
         }
         const res = await axios.post("/admin/delete-subject/esc", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in deleting subject. please try again later");
                             });
@@ -348,6 +352,7 @@ export function DisplayESCSubject(props){
         const res = await axios.post("/admin/edit-subject/esc", data)
                             .catch((err)=>{
                                 console.log(err);
+                                setLoading(true);
                                 if(err.response.data.message==="data not vaild"){
                                     alert("Please enter valid branch codes");
                                 }else{
@@ -486,6 +491,7 @@ export function DisplayCycleSubject(props){
         }
         const res = await axios.post("/admin/delete-subject/cyc", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in deleting subject. please try again later");
                             });
@@ -509,6 +515,7 @@ export function DisplayCycleSubject(props){
         }
         const res = await axios.post("/admin/edit-subject/cyc", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 if(err.response.data.message==="data not vaild"){
                                     alert("Please enter valid branch codes");
@@ -637,6 +644,7 @@ export function DisplayMDSubject(props){
         }
         const res = await axios.post("/admin/delete-subject/md", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 alert("Error in deleting subject. please try again later");
                             });
@@ -659,6 +667,7 @@ export function DisplayMDSubject(props){
         }
         const res = await axios.post("/admin/edit-subject/md", data)
                             .catch((err)=>{
+                                setLoading(true);
                                 console.log(err);
                                 if(err.response.data.message==="data not vaild"){
                                     alert("Please enter valid branch codes");

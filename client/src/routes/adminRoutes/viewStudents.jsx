@@ -40,6 +40,7 @@ function ViewStudents() {
         setisLoading(true);
         const response = await axios.post("/admin/save-passwords",studentData)
                         .catch((err)=>{
+                            setisLoading(true);
                             console.log(err);
                             alert("Something Went Wrong. Please try again later");
                         });

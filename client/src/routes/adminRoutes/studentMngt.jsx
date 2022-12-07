@@ -40,6 +40,7 @@ function StudentMngt() {
                 alert(res.data.message);
         })
         .catch((err) => {
+            setisLoading(true);
             console.log(err);
             alert("something went wrong. Please try again later");
         });
@@ -67,6 +68,7 @@ function StudentMngt() {
                 alert(res.data.message);
         })
         .catch((err) => {
+            setisLoading(true);
             console.log(err);
             alert("something went wrong. Please try again later");
         })
