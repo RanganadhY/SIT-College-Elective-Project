@@ -34,7 +34,7 @@ const [isLoading, setisLoading] = useState(false)
                             <div className="sp-student-profile-sem-details sp-student-profile-detail">
                                 <div className="sp-student-semester">
                                     <h4>Semester</h4>
-                                    <p>1st</p>
+                                    <p>{1st}</p>
                                 </div>
                                 <div className="sp-student-cycle">
                                     <h4>Cycle</h4>
