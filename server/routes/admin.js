@@ -19,7 +19,8 @@ const {
     deleteSubjectMD,
     getStatus,
     setStatus,
-    getSubjectsStatus
+    getSubjectsStatus,
+    generateReport
         } = require("../controllers/admin");
 
 router.post("/view-students",viewStudents);
@@ -40,5 +41,6 @@ router.post("/delete-subject/md",deleteSubjectMD);
 router.get("/get-status",getStatus);
 router.post("/set-status",setStatus);
 router.post("/get-subjects-status",getSubjectsStatus);
+router.get("/generate-report",generateReport)
 
 module.exports = router;
