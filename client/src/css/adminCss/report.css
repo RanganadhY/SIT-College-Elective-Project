@@ -89,6 +89,6 @@ tfoot td {
     padding-top: 2rem;
     padding-bottom: 2rem;
     text-align: center;
-    background-color: #4caf50;
+    /* background-color: #4caf50; */
     color: white;
 }
