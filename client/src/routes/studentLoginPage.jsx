@@ -65,7 +65,8 @@ function StudentLoginPage() {
                                 }
                             ).then((res)=>{
                                 console.log(res)
-                                navigate("/eligible-subjects",{state:res.data})
+                                console.log([res.data,studentUsn])
+                                navigate("/eligible-subjects",{state:[res.data,studentUsn]})
                             }).catch((error)=>{
                                 throw(error)
                             })

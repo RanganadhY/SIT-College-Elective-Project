@@ -417,6 +417,7 @@ const setStatus = async(req,res,next)=>{
 const getSubjectsStatus = async (req,res,next)=>{
     //get the codes from body
     const {eligibleSubjectCodes} = req.body;
+    console.log(eligibleSubjectCodes)
     // eligibleSubjectCodes = JSON.parse(eligibleSubjectCodes);
     //get the subjects enrolled count from the database
 

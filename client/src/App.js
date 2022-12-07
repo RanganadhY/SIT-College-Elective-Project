@@ -12,6 +12,7 @@ import AdminLogin from './routes/adminRoutes/adminLogin';
 import AuthRoute from './routes/authRoute';
 import Mapping from "./routes/adminRoutes/mapping"
 import ModifySubjects from './routes/adminRoutes/modifySubjects';
+import OptingSubjects from './routes/studentRoutes/optingSubjects';
 import Report from "./routes/adminRoutes/report";
 import StudentMngt from "./routes/adminRoutes/studentMngt";
 import SubjectMngt from "./routes/adminRoutes/subjectMngt";
@@ -57,6 +58,7 @@ function App() {
           {/* -------Student Protected Routes-------- */}
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>
             <Route path="/eligible-subjects" element={<VeiwElidgibleSubjects/>}/>
+            <Route path='/opting-subjects' element={<OptingSubjects/>}/>
           </Route>
           {/* -------Page Not Found----- */}
           <Route path='*' element={<PageNotFound/>}/>
