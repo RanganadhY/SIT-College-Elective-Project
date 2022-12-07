@@ -1,6 +1,7 @@
 const Branch = require("../models/branch");
 const Student = require("../models/student");
 const Subject = require("../models/subject");
+const Admin = require("../models/admin");
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock();
@@ -71,6 +72,12 @@ const getStudentDetails = async(req,res,next) =>{
 
 const optSubject = async(req,res,next) =>{
     try{
+        //check if subject selection is open
+        const subjectSelectionOpen = await Admin.find({}).select("subjectSelection");
+        if(subjectSelectionOpen[0].subjectSelection === false){
+            res.status(200).send({"message":"Subject selection is closed","code":609});
+            return;
+        }
         //get the usn and subject code from request
         const { usn, subjectCode } = req.body;
 
