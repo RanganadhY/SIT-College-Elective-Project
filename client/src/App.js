@@ -17,6 +17,7 @@ import Report from "./routes/adminRoutes/report";
 import StudentMngt from "./routes/adminRoutes/studentMngt";
 import SubjectMngt from "./routes/adminRoutes/subjectMngt";
 import VeiwElidgibleSubjects from "./routes/studentRoutes/studentProfile"
+import VeiwOptedSubjects from './routes/studentRoutes/veiwOptedSubjects';
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
 import EnableDisable from './routes/adminRoutes/enable-disable';
@@ -59,6 +60,7 @@ function App() {
           <Route element={<AuthRoute allowedRoles={[ROLES.Student]}/>}>
             <Route path="/eligible-subjects" element={<VeiwElidgibleSubjects/>}/>
             <Route path='/opting-subjects' element={<OptingSubjects/>}/>
+            <Route path='/veiw-opted-subjects' element={<VeiwOptedSubjects/>}/>
           </Route>
           {/* -------Page Not Found----- */}
           <Route path='*' element={<PageNotFound/>}/>

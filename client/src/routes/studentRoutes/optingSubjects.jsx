@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {useLocation} from "react-router-dom"
+import {useNavigate, useLocation} from "react-router-dom"
 //importing style sheet
 import "../../css/studentCss/optingSubjects.css"
 //importing loading
@@ -10,14 +10,20 @@ function OptingSubjects() {
 
     const {state} = useLocation();
 
+    const navigate = useNavigate()
+
     const [isLoading, setisLoading] = useState(false);
 
     const [escSubState, setescSubState] = useState("NA");
     const [isEscSaved, setisEscSaved] = useState(false);
+    const [escResultMsg, setescResultMsg] = useState("");
 
     const [electiveSubState, setelectiveSubState] = useState("NA");
+    const [isElectiveSubSaved, setisElectiveSubSaved] = useState(false)
+    const [electiveMsg, setelectiveMsg] = useState("");
 
-    const [errMsg, seterrMsg] = useState("")
+    const [errMsg, seterrMsg] = useState("");
+
 
     //handling ESC save
     const handleEscSave = async()=>{
@@ -27,28 +33,120 @@ function OptingSubjects() {
             "subjectCode":escSubState
         }
         console.log(userDetails)
+        if(escSubState ==="NA"){
+            alert("Please Select a Subject");
+            setisLoading(false)
+        }
+        else{
+            try{
+                await axios.post("/student/opt-subject",userDetails,
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                        },
+                        withCredentials: true
+                    }
+                    ).then((response)=>{
+                        console.log(response)
+                        if(response.status ===200){
+                            if(response.data.code === 608){
+                                setescResultMsg(response.data.message);//saved sucessfully
+                                setisEscSaved(true)
+                                alert(response.data.message)
+                            }
+                            else if(response.data.code === 607){
+                                setescResultMsg(response.data.message); //you have 
+                                setescSubState(true);
+                                alert(response.data.message)
+                            }
+                            else if(response.data.code === 606){
+                                setescResultMsg(response.data.message);//subject is full no one can take it
+                                setescSubState(true)
+                                alert(response.data.message) 
+                            }
+                            else{
+                                setescResultMsg(false);
+                                setescResultMsg(response.data.message)
+                                alert(response.data.message)
+                            }
+                        }
+                    })
+                    .catch((error)=>{
+                        throw(error)
+                    })
+            }catch(error){
+                setisLoading(false);
+                setescResultMsg(error.message);
+                alert(error.data.message)
+            }
+            finally{
+                setisLoading(false);
+            }
+        }
+        
+    }
+    const handleElectiveSave = async()=>{
+        setisLoading(true);
+        const userDetails = {
+            "usn":state.USN,
+            "subjectCode":electiveSubState
+        }
+        console.log(userDetails);
+        if(electiveSubState ==="NA"){
+            alert("Please Select a Subject");
+            setisLoading(false)
+        }
+        else{
+            try{
+                await axios.post("/student/opt-subject",userDetails,
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                        },
+                        withCredentials: true
+                    }
+                    ).then((response)=>{
+                        console.log(response)
+                        if(response.status ===200){
+                            if(response.data.code === 608){
+                                setelectiveMsg(response.data.message);//saved sucessfully
+                                setisElectiveSubSaved(true)
+                                alert(response.data.message);
+                                navigate("/")
 
-        try{
-            await axios.post("/student/opt-subject",userDetails,
-                {
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        "authorization":"Bearer "+String(localStorage.getItem("authToken"))
-                    },
-                    withCredentials: true
-                }
-                ).then((response)=>{
-                    console.log(response)
-                })
-                .catch((error)=>{
-                    throw(error)
-                })
-        }catch(error){
-            setisLoading(false);
+                            }
+                            else if(response.data.code === 607){
+                                setelectiveMsg(response.data.message); //you have 
+                                setisElectiveSubSaved(true);
+                                alert(response.data.message)
+                            }
+                            else if(response.data.code === 606){
+                                setelectiveMsg(response.data.message);//subject is full no one can take it
+                                setisElectiveSubSaved(false);
+                                alert(response.data.message) 
+                            }
+                            else{
+                                setelectiveMsg(false);
+                                setelectiveMsg(response.data.message)
+                                alert(response.data.message)
+                            }
+                        }
+                    })
+                    .catch((error)=>{
+                        throw(error)
+                    })
+            }catch(error){
+                setisLoading(false);
+                setelectiveMsg(error.message);
+                alert(error.data.message)
+            }
+            finally{
+                setisLoading(false);
+            }
         }
-        finally{
-            setisLoading(false);
-        }
+        
     }
 
     return (
@@ -61,7 +159,7 @@ function OptingSubjects() {
                     <div className="os-main-heading">
                         <h2>Select Your Subjects below</h2>
                     </div>
-                    <div className="os-Esc-selection">
+                    <div className="os-Esc-selection" disabled={true}>
                         <div className="os-esc-heading">
                             <h3>Engineering Science Course:</h3>
                         </div>
@@ -69,11 +167,12 @@ function OptingSubjects() {
                             <select 
                                 name="" 
                                 id=""
+                                disabled={isEscSaved}
                                 value={escSubState}
                                 onChange={(e)=>setescSubState(e.target.value)}
                                 >
                                 
-                                <option value="NA">-SELECT-</option>
+                                <option  hidden={true} value="NA">-SELECT-</option>
                                 {state&&state.possibleESCSubsTotake.map((key,index)=>{
                                     return(
                                         <option 
@@ -86,7 +185,8 @@ function OptingSubjects() {
                             </select>
                             <div className="os-esc-save-option">
                                 <button
-                                    className='os-esc-save-button'
+                                    disabled={isEscSaved}
+                                    className={isEscSaved?"os-esc-save-button-disabled":'os-esc-save-button'}
                                     onClick={handleEscSave}
                                 >Save</button>
                             </div>
@@ -100,10 +200,11 @@ function OptingSubjects() {
                             <select 
                                 name="" 
                                 id=""
+                                disabled={!isEscSaved}
                                 value={electiveSubState}
                                 onChange={(e)=>setelectiveSubState(e.target.value)}
                                 >
-                                <option value="NA">-SELECT-</option>
+                                <option hidden={true} value="NA">-SELECT-</option>
                                 {state&&state.possibleSlectiveSubsTotake.map((key,index)=>{
                                     return(
                                         <option 
@@ -115,7 +216,9 @@ function OptingSubjects() {
                             </select>
                             <div className="os-esc-save-option">
                                 <button
-                                    className='os-esc-save-button'
+                                    disabled={!isEscSaved}
+                                    className={!isEscSaved?"os-button-disabled":'os-esc-save-button'}
+                                    onClick={handleElectiveSave}
                                 >Save</button>
                             </div>
                         </div>

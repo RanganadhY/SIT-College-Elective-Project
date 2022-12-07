@@ -17,7 +17,6 @@ function VeiwElidgleSubjects() {
     const [escSubjectState, setescSubjectState] = useState();
     const [electiveSubjectState, setelectiveSubjectState] = useState();
 
-    console.log(state)
     const studentProfile = state[0].studentProfile
 
     var EscEligbleSubjectsArray = state[0].eligibleSubjects[0].esc
@@ -155,9 +154,9 @@ function VeiwElidgleSubjects() {
                                 </div>
                                 <div>
                                     <button 
-                                        disabled={state[0].studentProfile.subjectSelection[0]&&state.studentProfile.subjectSelection[1]}
+                                        disabled={state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]}
                                         onClick={handleOptSubjects}
-                                        className={state[0].studentProfile.subjectSelection[0]&&state.studentProfile.subjectSelection[1]?'veiw-opted-subjects-display-none-button':"veiw-opted-subjects-button"}>Opt Subjects</button>
+                                        className={state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]?'veiw-opted-subjects-display-none-button':"veiw-opted-subjects-button"}>Opt Subjects</button>
                                 </div>
                             </div>
                         </div>
