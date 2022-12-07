@@ -64,7 +64,8 @@ function StudentLoginPage() {
                                     withCredentials: true
                                 }
                             ).then((res)=>{
-                                navigate("/eligible-subjects",{state:{"eligibleSubjects":res.data.eligibleSubjects}})
+                                console.log(res)
+                                navigate("/eligible-subjects",{state:res.data})
                             }).catch((error)=>{
                                 throw(error)
                             })
