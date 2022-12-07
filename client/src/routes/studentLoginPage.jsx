@@ -89,7 +89,8 @@ function StudentLoginPage() {
             
         }catch(error){
                 setisLoading(false)
-                seterrorMessage(error.response.data.message)
+                // seterrorMessage(error.response.data.message)
+                console.log(error)
                 
         }
         finally{
