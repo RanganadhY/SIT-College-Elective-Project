@@ -40,7 +40,7 @@ function AdminNavbar() {
                     <li><NavLink to="/modify-subjects">Subject Mgmt</NavLink></li>
                     <li><NavLink to="/mapping">Mapping</NavLink></li>
                     <li><NavLink to="/report">Report</NavLink></li>
-                    <li onClick={getSubjectSelectionStatus}> <NavLink>Settings</NavLink></li>
+                    <li onClick={getSubjectSelectionStatus}> <a>Settings</a></li>
                 </ul>
             </div>
             
