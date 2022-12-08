@@ -475,7 +475,7 @@ const generateReport = async(req,res,next)=>{
                 "academicYear":studentDetails[i].academicYear,
                 "cycle": branchDetails[0].cycle,
                 "ESC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="ESC").map((sub)=>sub.subject.name).join(","),
-                // "CYC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="CYC").map((sub)=>sub.subject.name).join(","),
+                "CYC":studentDetails[i].subEnrolled.filter((sub)=>sub.subject.type==="CYC").map((sub)=>sub.subject.name).join(","),
             };
             reportData.push(studentObj);
         }
