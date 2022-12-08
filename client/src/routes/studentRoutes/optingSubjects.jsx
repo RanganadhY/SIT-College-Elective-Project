@@ -117,7 +117,7 @@ function OptingSubjects() {
                                 setelectiveMsg(response.data.message);//saved sucessfully
                                 setisElectiveSubSaved(true)
                                 alert(response.data.message);
-                                navigate("/eligible-subjects")
+                                navigate("/")
 
                             }
                             else if(response.data.code === 607){
