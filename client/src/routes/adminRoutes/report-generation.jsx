@@ -8,6 +8,7 @@ import "../../css/adminCss/studentMngt.css"
 import AdminNavbar from '../../components/adminNavbar/adminNavbar'
 
 import { AdminLoader } from '../../components/loading component/loader';
+import { useEffect } from 'react'
 
 function ReportGeneration() {
 
@@ -17,14 +18,38 @@ function ReportGeneration() {
     const [yearEnd, setYearEnd] = useState(0);
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
+    const [subject, setSubject] = useState("NA");
+    const [subjectData, setSubjectData] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const getSubjects = async()=>{
+        setLoading(true);
+        setLoading(true);
+        const res = await axios.get("/admin/get-present-subjects",{
+                "academinYear":String(String(yearStart) + "-" + String(yearEnd).slice(2)),
+                "semester":parseInt(semisterOptionState),
+                "branchCode":branchOptionState
+            })
+            .catch((err)=>{
+                setLoading(false);
+                console.log(err);
+            });
+        if(res.data){
+            console.log(res.data);
+            if(res.data.message==="successfull"){
+                setSubjectData(res.data.subjectData);
+            }
+        }
+        setLoading(false);
+    }
 
     const getReportData = async()=>{
         setLoading(true);
         const res = await axios.post("/admin/generate-report",{
                 "academinYear":String(String(yearStart) + "-" + String(yearEnd).slice(2)),
                 "semester":parseInt(semisterOptionState),
-                "branchCode":branchOptionState
+                "branchCode":branchOptionState,
+                "subject":subject
             })
             .catch((err)=>{
                 setLoading(false);
@@ -47,16 +72,29 @@ function ReportGeneration() {
     }
 
     const handleSubmit =async (e)=>{
-        const form = e.currentTarget;
-        if(form.checkValidity() === false){
+        if(branchOptionState==="NA" && subject==="NA"){
             e.preventDefault();
-            e.stopPropagation();
+            alert("Select either branch or subject or both to proceed");
         }else{
-            e.preventDefault();
-            e.stopPropagation();
-            getReportData();
+            const form = e.currentTarget;
+            if(form.checkValidity() === false){
+                e.preventDefault();
+                e.stopPropagation();
+            }else{
+                e.preventDefault();
+                e.stopPropagation();
+                getReportData();
+            }
         }
     }
+
+    useEffect(()=>{
+        async function fetchData(){
+            await getSubjects();
+        }
+        fetchData();
+    },[]);
+
     return (
         <>
             <AdminNavbar/>
@@ -85,13 +123,12 @@ function ReportGeneration() {
                         <div className="student-mngt-credential-container">
                             <label htmlFor="branch">Branch</label>
                             <select 
-                                required
                                 name="branch" 
                                 id=""
                                 value={branchOptionState}
                                 onChange={(e)=>setbranchOptionState(e.target.value)}
                             >
-                                <option hidden selected value="">--Select--</option>
+                                <option selected value="NA">--Select--</option>
                                 <option value="AD">Artificial Intelligence & Data Science</option>
                                 <option value="BT"> Biotechnology</option>
                                 <option value="CH">Chemical Engineering</option>
@@ -105,6 +142,24 @@ function ReportGeneration() {
                                 <option value="IM">Industrial Engineering and Management</option>
                                 <option value="IS">Information Science and Engineering</option>
                                 <option value="ME">Mechanical Engineering</option>
+                                
+                            </select>
+                        </div>
+                        <div className="student-mngt-credential-container">
+                            <label htmlFor="branch">Subject</label>
+                            <select 
+                                name="subject" 
+                                id=""
+                                value={subject}
+                                onChange={(e)=>setSubject(e.target.value)}
+                            >
+                                <option selected value="NA">--Select--</option>
+                                {
+                                    subjectData.length!==0 && subjectData.map((sub,key)=>{
+                                        // console.log(sub)
+                                        return <option key={key} value={sub.code}>{sub.name}</option>
+                                    })
+                                }
                                 
                             </select>
                         </div>
