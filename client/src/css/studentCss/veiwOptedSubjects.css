@@ -1,0 +1,54 @@
+
+.vos-mainheading{
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin: 2rem 0;
+    
+}
+.vos-mainheading h2{
+    border-bottom: 2px solid crimson;
+}
+
+.VeiwOptedSubjects-student-profile{
+    padding: 5rem 0rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.VeiwOptedSubjects-student-profile div{
+    width: 100%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    margin: 0.4rem 0;
+    background-color: #00BFA6;
+    color: white;
+    border-radius: 1rem;
+}
+.VeiwOptedSubjects-student-profile p{
+    font-size: 2.75rem;
+    text-transform: capitalize;
+}
+.os-student-credential-container{
+    width: 100%;
+    display: flex;
+
+}
+.vos-student-sb{
+    padding: 0rem 2rem;
+    
+}
+.vos-opted-subject-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vos-esc-save-option{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:2rem;
+}

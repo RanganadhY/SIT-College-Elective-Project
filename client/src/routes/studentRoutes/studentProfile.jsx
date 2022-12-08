@@ -14,6 +14,9 @@ function VeiwElidgleSubjects() {
     const {state} = useLocation();
     const navigate = useNavigate();
 
+    const studentUsn = state[1]
+    
+
     const [escSubjectState, setescSubjectState] = useState();
     const [electiveSubjectState, setelectiveSubjectState] = useState();
 
@@ -86,38 +89,128 @@ function VeiwElidgleSubjects() {
         getCycleStatus()
     },[]);
 
+    
+
     const handleOptSubjects = async()=>{
-        var possibleESCSubsTotake = [];
-        var possibleSlectiveSubsTotake = []
-        var statusOfOptingSubs;
+        try{
+            const possibleESCSubsTotake = [];
+            const possibleSlectiveSubsTotake = []
+            var statusOfOptingSubs;
+            
+            await axios.post("/admin/get-subjects-status",
+                    {
+                        "eligibleSubjectCodes":EscEligbleSubjectscodes
+                    },
+                        {
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                            },
+                            withCredentials: true
+                        }
+                ).then((response)=>{
+                    // console.log(response.data.subjectsCount.length)
+                    for(let i=0;i<response.data.subjectsCount.length;i++){
+                        // console.log(response)
+                        // console.log(((response.data.subjectsCount[i].maxCount) -(response.data.subjectsCount[i].enrolledCount))>0)
+                        if(((response.data.subjectsCount[i].maxCount) -(response.data.subjectsCount[i].enrolledCount))>0){
+                            // console.log("hello")
+                            // console.log("hello")
+                            possibleESCSubsTotake.push({"name":response.data.subjectsCount[i].name,"code":response.data.subjectsCount[i].code}); 
+                            // console.log(possibleESCSubsTotake)
+                        }
+                        else{
+                            continue
+                        }
+                    }
+                }).catch((error)=>{
+                    // console.log(error)
+                    throw(error)
+                })
+
+                await axios.post("/admin/get-subjects-status",
+                {
+                    "eligibleSubjectCodes":electiveEligbleSubjectsCodes
+                },
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                        },
+                        withCredentials: true
+                    }
+            ).then((response)=>{
+                
+                for(let i=0;i<response.data.subjectsCount.length;i++){
+
+                    if(((response.data.subjectsCount[i].maxCount)-(response.data.subjectsCount[i].enrolledCount))>0){
+                        possibleSlectiveSubsTotake.push({"name":response.data.subjectsCount[i].name,"code":response.data.subjectsCount[i].code});
+    
+                    }
+                    else{
+                        continue
+                    }
+                }
+            }).catch((error)=>{
+                // console.log(error)
+                throw(error)
+            })
+            
+            if(state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]){
+                statusOfOptingSubs=0;
+            }
+            else if(state[0].studentProfile.subjectSelection[0]){
+                statusOfOptingSubs = 2;
+            }
+            else {
+                statusOfOptingSubs = 1;
+            }
+            var studentStateofOpting = 
+            {
+                possibleESCSubsTotake,
+                possibleSlectiveSubsTotake,
+                statusOfOptingSubs,
+                "USN":state[1]
+            }
+            console.log(studentStateofOpting);
+            navigate("/opting-subjects",{state:studentStateofOpting})
+        }catch(err){
+            console.log(err)
+        }
         
-        for(let i =0;i<escSubjectState.length;i++){
-            if(escSubjectState[i].maxCount>(escSubjectState[i].maxCount-escSubjectState[i].enrolledCount)){
-                possibleESCSubsTotake.push(escSubjectState[i])
+        
+    }
+
+    const handleVeiwOpetedSubs = async()=>{
+
+        await axios.post("/student/registered-subjects",
+            {
+                "usn":studentUsn
+            },
+            {
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                },
+                withCredentials: true
             }
-        }
-        for(let i =0;i<electiveSubjectState.length;i++){
-            if(electiveSubjectState[i].maxCount>(electiveSubjectState[i].maxCount-electiveSubjectState[i].enrolledCount)){
-                possibleSlectiveSubsTotake.push(electiveSubjectState[i])
+        ).then((response)=>{
+            if(response.data.studiedSubjects.length===0){
+                alert("You haven't opted any subjects yet")
             }
-        }
-        if(state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]){
-            statusOfOptingSubs=0;
-        }
-        else if(state[0].studentProfile.subjectSelection[0]){
-            statusOfOptingSubs = 2;
-        }
-        else {
-            statusOfOptingSubs = 1;
-        }
-        var studentStateofOpting = {
-            possibleESCSubsTotake,
-            possibleSlectiveSubsTotake,
-            statusOfOptingSubs,
-            "USN":state[1]
-        }
-        console.log(studentStateofOpting);
-        navigate("/opting-subjects",{state:studentStateofOpting})
+            else{
+                navigate("/veiw-opted-subjects",
+                {state:{
+                    "studentDetails":{
+                        "studentUsn":studentUsn,
+                        "name":studentProfile.name,
+                        "branch":studentProfile.branch,
+                        "semester":studentProfile.semester,
+                        "cycle":studentProfile.cycle
+                    },
+                    "optedSubjects":response.data.studiedSubjects}})
+            }
+        })
         
     }
 
@@ -127,7 +220,7 @@ function VeiwElidgleSubjects() {
             <div className="sp-main-wrapper">
                 <div className="sp-main-container">
                     <div className="sp-student-profile-container">
-                        <div className="sp-student-profile-col1">
+                        {/* <div className="sp-student-profile-col1">
                             <div className="sp-student-profile-name sp-student-profile-detail">
                                 <h2>{studentProfile.name}</h2>
                             </div>
@@ -136,7 +229,7 @@ function VeiwElidgleSubjects() {
                             </div>
                             <div className="sp-student-profile-sem-details sp-student-profile-detail">
                                 <div className="sp-student-semester">
-                                    <h4>Semester</h4>
+                                    <h4>Sem</h4>
                                     <p>{studentProfile.semester}</p>
                                 </div>
                                 <div className="sp-student-cycle">
@@ -145,18 +238,38 @@ function VeiwElidgleSubjects() {
                                 </div>
                             </div>
                             
+                            
+                        </div> */}
+                        <div className="sp-student-info">
+                            <div className="sp-student-name">
+                                <p>{studentProfile.name}</p>
+                            </div>
+                            <div className="sp-student-branch">
+                                <p>{studentProfile.branch}</p>
+                            </div>
+                            <div className="sp-student-sem">
+                                <p>Sem:</p>
+                                <p>{studentProfile.semester}</p>
+                            </div>
+                            <div className="sp-student-semester">
+                                <p>Cycle:</p>
+                                <p>{studentProfile.cycle}</p>
+                            </div>
                         </div>
+                        
                         <div className="sp-student-profile-col2">
                             
                             <div className="sp-student-profile-button-actions-container">
                                 <div className='veiw-opted-subjects'>
-                                    <button className='veiw-opted-subjects-button'>Veiw Opted Subjects</button>
+                                    <button 
+                                        onClick={handleVeiwOpetedSubs}
+                                        className='veiw-opted-subjects-button'>Opted Subjects</button>
                                 </div>
-                                <div>
+                                <div className='opting-subjects-button'>
                                     <button 
                                         disabled={state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]}
                                         onClick={handleOptSubjects}
-                                        className={state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]?'veiw-opted-subjects-display-none-button':"veiw-opted-subjects-button"}>Opt Subjects</button>
+                                        className={state[0].studentProfile.subjectSelection[0]&&state[0].studentProfile.subjectSelection[1]?'veiw-opted-subjects-display-none-button':"veiw-opted-subjects-button"}>Select Subjects</button>
                                 </div>
                             </div>
                         </div>

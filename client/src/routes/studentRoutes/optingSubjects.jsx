@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+    import React,{useState} from 'react'
 import {useNavigate, useLocation} from "react-router-dom"
 //importing style sheet
 import "../../css/studentCss/optingSubjects.css"
@@ -9,7 +9,7 @@ import axios from "../../axios/axios"
 function OptingSubjects() {
 
     const {state} = useLocation();
-
+    // console.log(state)
     const navigate = useNavigate()
 
     const [isLoading, setisLoading] = useState(false);
@@ -24,6 +24,7 @@ function OptingSubjects() {
 
     const [errMsg, seterrMsg] = useState("");
 
+    // console.log(state.possibleESCSubsTotake)
 
     //handling ESC save
     const handleEscSave = async()=>{
@@ -58,11 +59,13 @@ function OptingSubjects() {
                             else if(response.data.code === 607){
                                 setescResultMsg(response.data.message); //you have 
                                 setescSubState(true);
+                                setisEscSaved(true)
                                 alert(response.data.message)
                             }
                             else if(response.data.code === 606){
                                 setescResultMsg(response.data.message);//subject is full no one can take it
                                 setescSubState(true)
+                                setisEscSaved(false)
                                 alert(response.data.message) 
                             }
                             else{
@@ -114,7 +117,7 @@ function OptingSubjects() {
                                 setelectiveMsg(response.data.message);//saved sucessfully
                                 setisElectiveSubSaved(true)
                                 alert(response.data.message);
-                                navigate("/")
+                                navigate("/eligible-subjects")
 
                             }
                             else if(response.data.code === 607){
@@ -159,70 +162,74 @@ function OptingSubjects() {
                     <div className="os-main-heading">
                         <h2>Select Your Subjects below</h2>
                     </div>
+                
+                    <div className="os-selection-selection">
                     <div className="os-Esc-selection" disabled={true}>
                         <div className="os-esc-heading">
                             <h3>Engineering Science Course:</h3>
                         </div>
                         <div className="os-esc-subject-select-option">
-                            <select 
-                                name="" 
-                                id=""
-                                disabled={isEscSaved}
-                                value={escSubState}
-                                onChange={(e)=>setescSubState(e.target.value)}
-                                >
-                                
-                                <option  hidden={true} value="NA">-SELECT-</option>
-                                {state.possibleESCSubsTotake.map((key,index)=>{
-                                    return(
-                                        <option 
-                                            value={state.possibleESCSubsTotake[index].code}>
-                                            {state.possibleESCSubsTotake[index].name}
-                                        </option>
-                                    )
-                                    
-                                })}
-                            </select>
-                            <div className="os-esc-save-option">
-                                <button
+                                <select 
+                                    name="" 
+                                    id=""
                                     disabled={isEscSaved}
-                                    className={isEscSaved?"os-esc-save-button-disabled":'os-esc-save-button'}
-                                    onClick={handleEscSave}
-                                >Save</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="os-elective-selection">
-                        <div className="os-esc-heading">
-                            <h3>Elective Course:</h3>
-                        </div>
-                        <div className="os-esc-subject-select-option">
-                            <select 
-                                name="" 
-                                id=""
-                                disabled={!isEscSaved}
-                                value={electiveSubState}
-                                onChange={(e)=>setelectiveSubState(e.target.value)}
-                                >
-                                <option hidden={true} value="NA">-SELECT-</option>
-                                {state.possibleSlectiveSubsTotake.map((key,index)=>{
-                                    return(
-                                        <option 
-                                            value={state.possibleSlectiveSubsTotake[index].code}>
-                                                {state.possibleSlectiveSubsTotake[index].name}</option>
-                                    )
+                                    value={escSubState}
+                                    onChange={(e)=>setescSubState(e.target.value)}
+                                    >
                                     
-                                })}
-                            </select>
-                            <div className="os-esc-save-option">
-                                <button
-                                    disabled={!isEscSaved}
-                                    className={!isEscSaved?"os-button-disabled":'os-esc-save-button'}
-                                    onClick={handleElectiveSave}
-                                >Save</button>
+                                    <option   value="NA">-SELECT-</option>
+                                    {state.possibleESCSubsTotake&&state.possibleESCSubsTotake.map((key,index)=>{
+                                        return(
+                                            <option 
+                                                value={state.possibleESCSubsTotake[index].code}>
+                                                {state.possibleESCSubsTotake[index].name}
+                                            </option>
+                                        )
+                                        
+                                    })}
+                                </select>
+                                <div className="os-esc-save-option">
+                                    <button
+                                        disabled={isEscSaved}
+                                        className={isEscSaved?"os-esc-save-button-disabled":'os-esc-save-button'}
+                                        onClick={handleEscSave}
+                                    >Save</button>
+                                </div>
+                            </div>
+                    </div>
+                        <div className="os-elective-selection">
+                            <div className="os-esc-heading">
+                                <h3>Elective Course:</h3>
+                            </div>
+                            <div className="os-esc-subject-select-option">
+                                <select 
+                                    name="" 
+                                    id=""
+                                    disabled={!isEscSaved || isElectiveSubSaved}
+                                    value={electiveSubState}
+                                    onChange={(e)=>setelectiveSubState(e.target.value)}
+                                    >
+                                    <option hidden={true} value="NA">-SELECT-</option>
+                                    {state.possibleSlectiveSubsTotake.map((key,index)=>{
+                                        return(
+                                            <option 
+                                                value={state.possibleSlectiveSubsTotake[index].code}>
+                                                    {state.possibleSlectiveSubsTotake[index].name}</option>
+                                        )
+                                        
+                                    })}
+                                </select>
+                                <div className="os-esc-save-option">
+                                    <button
+                                        disabled={!isEscSaved}
+                                        className={!isEscSaved?"os-button-disabled":'os-esc-save-button'}
+                                        onClick={handleElectiveSave}
+                                    >Save</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </>

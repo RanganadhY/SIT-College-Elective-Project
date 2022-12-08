@@ -24,7 +24,12 @@
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #bf0019;
 }
-
+.os-selection-selection{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-height: 50vh;
+}
 .os-esc-heading{
     padding-left:2rem;
 }
@@ -163,4 +168,11 @@
         will-change: box-shadow,transform;
         font-size: 18px;
         
+    }
+
+    @media only screen and (max-width:480px) {
+
+        .os-selection-selection{
+            height: 70vh;
+        }
     }
