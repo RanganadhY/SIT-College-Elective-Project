@@ -1,4 +1,4 @@
-.switch-main-container{
+.main-container{
     position: fixed;
     top:50%;
     left: 50%;
@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-.switch-main-container span.heading{
+.main-container span.heading{
     font-size:3rem;
     align-self: center;
     padding: 0 2rem;
@@ -58,14 +58,14 @@
 }
 
 .inner:before {
-    content: "YES";
+    content: "ON";
     padding-left: 1rem;
     background-color: #060;
     color: #fff;
 }
 
 .inner:after {
-    content: "NO";
+    content: "OFF";
     padding-right: 1rem;
     background-color: #bbb;
     color: #fff;

@@ -1,5 +1,5 @@
 import React,{ useState, useMemo} from 'react';
-import { useTable, usePagination, useRowSelect} from "react-table";
+import { useTable, usePagination, useRowSelect, useFilters} from "react-table";
 import { useLocation } from 'react-router-dom';
 import * as XLSX from "xlsx";
 
@@ -18,6 +18,14 @@ function Report() {
 
     const [reportData, setReportData] = useState(state.reportData);
     const [loading, setLoading] = useState(false);
+
+    const defaultColumn = useMemo(
+        () => ({
+          // Let's set up our default Filter UI
+          Filter: ColumnFilter,
+        }),
+        []
+      )  
 
     const columns = useMemo(
         () => [
@@ -75,11 +83,11 @@ function Report() {
         selectedFlatRows,
         canPreviousPage,
         prepareRow,
-        setGlobalFilter
     } = useTable(
         {
             columns,
             data: tableData,
+            // defaultColumn,
             initialState: { pageSize: 50 }
         },
         (hooks) => {
@@ -98,6 +106,7 @@ function Report() {
                 ]
             })
         },
+        // useFilters,
         usePagination,
         useRowSelect,
     );

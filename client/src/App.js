@@ -20,7 +20,7 @@ import VeiwElidgibleSubjects from "./routes/studentRoutes/studentProfile"
 import VeiwOptedSubjects from './routes/studentRoutes/veiwOptedSubjects';
 import ViewStudents from './routes/adminRoutes/viewStudents';
 import ViewPasswords from './routes/adminRoutes/viewPasswords';
-import EnableDisable from './routes/adminRoutes/enable-disable';
+import Settings from './routes/adminRoutes/settings';
 import ReportGen from "./routes/adminRoutes/report-generation.jsx";
 
 
@@ -54,7 +54,7 @@ function App() {
             <Route path='/report' element={<Report/>}/>
             <Route path='/view-students' element={<ViewStudents/>}/>
             <Route path='/view-passwords' element={<ViewPasswords/>}/>
-            <Route path="/selection-enable-disable" element={<EnableDisable/>}/>
+            <Route path="/selection-enable-disable" element={<Settings/>}/>
             <Route path="/report-generation" element={<ReportGen/>} />
           </Route>
 

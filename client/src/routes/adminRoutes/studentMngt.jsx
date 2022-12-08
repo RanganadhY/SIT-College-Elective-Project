@@ -17,10 +17,10 @@ function StudentMngt() {
     const [yearEnd, setYearEnd] = useState(0);
     const [branchOptionState, setbranchOptionState] = useState("NA");
     const [semisterOptionState, setsemisterOptionState] = useState("NA");
-    const [isLoading, setisLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleViewStudents = () => {
-        setisLoading(true);
+        setLoading(true);
         const data = {
             yearStart: yearStart,
             yearEnd: yearEnd,
@@ -40,15 +40,15 @@ function StudentMngt() {
                 alert(res.data.message);
         })
         .catch((err) => {
-            setisLoading(true);
+            setLoading(false);
             console.log(err);
             alert("something went wrong. Please try again later");
         });
-        setisLoading(false);
+        setLoading(false);
     }
 
     const handleViewPasswords = () =>{
-        setisLoading(true);
+        setLoading(true);
         const data = {
             yearStart: yearStart,
             yearEnd: yearEnd,
@@ -68,11 +68,11 @@ function StudentMngt() {
                 alert(res.data.message);
         })
         .catch((err) => {
-            setisLoading(true);
+            setLoading(false);
             console.log(err);
             alert("something went wrong. Please try again later");
         })
-        setisLoading(false);
+        setLoading(false);
     }
 
     const handleSubmit =async (e)=>{
@@ -94,7 +94,7 @@ function StudentMngt() {
         <>
             <AdminNavbar/>
             {
-                isLoading&&<AdminLoader/>
+                loading && <AdminLoader/>
             }
             <div className="student-mngt-main-wrapper">
                 <div className="student-mngt-main-container">
@@ -153,7 +153,7 @@ function StudentMngt() {
                                 <option hidden selected value="">--Select--</option>
                                 <option value="1">&#8544;</option>
                                 <option value="2">&#8545;</option>
-                                <option value="3">&#8546;</option>
+                                {/* <option value="3">&#8546;</option> */}
                             </select>
                         </div>
                         <div className="student-mngt-button-actions">

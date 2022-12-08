@@ -14,8 +14,10 @@ const port = process.env.PORT;
 
 app.use(cors({
     credentials:true,
-    origin:"http://localhost:3001"}));
-    // origin:"http://sitsubjectregistration.s3-website.ap-south-1.amazonaws.com"
+    origin:"http://sitsubjectregistration.s3-website.ap-south-1.amazonaws.com"
+    }));
+    // origin:"http://localhost:3001"
+    
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

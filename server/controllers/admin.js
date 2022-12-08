@@ -28,7 +28,7 @@ const viewStudents = async(req,res,next)=>{
         const year = String(yearStart + "-" + String(yearEnd).slice(2));
 
         //querying the database with the request parameters
-        const studentDetails = await Upload.find({Branch:branch,AcademicYear:year},{_id:0,Branch:0,AcademicYear:0,semester:0}).select("Name USN");
+        const studentDetails = await Upload.find({Branch:branch,AcademicYear:year,semester:semester},{_id:0,Branch:0,AcademicYear:0,semester:0}).select("Name USN");
 
         res.status(200).send({"message":"successfull","data":studentDetails,"semester":semester,"branch":branch,"academicYear":year});
 
@@ -79,7 +79,7 @@ const viewPasswords = async(req,res,next) =>{
         const year = String(yearStart + "-" + String(yearEnd).slice(2));
 
         //Searching data based on the request parameters
-        const studentData = await Student.find({branch:branch,academicYear:year},{_id:0,branch:0,academicYear:0,semester:0,subEnrolled:0,createdAt:0,updatedAt:0,__v:0});
+        const studentData = await Student.find({branch:branch,academicYear:year,semester:semester},{_id:0,branch:0,academicYear:0,semester:0,subEnrolled:0,createdAt:0,updatedAt:0,__v:0});
         
         //sending response
         res.status(200).send({"message":"successfull","data":studentData});
@@ -487,6 +487,33 @@ const generateReport = async(req,res,next)=>{
         res.status(400).send({"message":err.message});
     }
 }
+
+const upgradeSem = async(req,res,next)=>{
+    try{
+        //get data from request
+        const { academicYear, semester} = req.body;
+
+        //check for validity
+        if(
+            !semester ||
+            !(semesters.includes(semester)) ||
+            !academicYear
+        ){
+            res.status(400).send({"message":"data not valid"})
+            return;
+        }
+        //update student db 
+        await Student.updateMany({academicYear:academicYear,semester:semester});
+
+        //send result
+        res.status(200).send({"message":"successfull"});
+
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
 module.exports = {
     viewStudents, 
     viewPasswords, 
@@ -506,5 +533,6 @@ module.exports = {
     getStatus,
     setStatus,
     getSubjectsStatus,
-    generateReport
+    generateReport,
+    upgradeSem
 }
