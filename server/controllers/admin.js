@@ -448,25 +448,49 @@ const getSubjectsStatus = async (req,res,next)=>{
 
 const generateReport = async(req,res,next)=>{
     try{
-        const {academinYear, semester, branchCode} = req.body;
+        const {academinYear, semester, branchCode, subject} = req.body;
         if(
-            !branchCode ||
-            !(branchCodes.includes(branchCode)) ||
             !semester ||
             !(semesters.includes(semester)) ||
             !academinYear
+            // !(branchCode==="NA" && subject==="NA")
         )
         {
             res.status(400).send({"message":"data not valid"})
             return;
         }
-        //get student data from the database
-        const studentDetails = await Student.find({branch:branchCode, academicYear:academinYear, semester:semester}).populate("subEnrolled.subject").sort({USN:1});
-        //get branch details
-        const branchDetails = await Branch.find({code:branchCode});
+        let studentDetails=[];
+        //case 1
+        if(branchCode && subject==="NA"){
+            //get student data from the database
+            studentDetails = await Student.find({branch:branchCode, academicYear:academinYear, semester:semester}).populate("subEnrolled.subject").sort({USN:1});
+        }
+        //case 2
+        else if(branchCode==="NA" && subject){
+            const students = await Student.find({academicYear:academinYear, semester:semester}).populate("subEnrolled.subject").sort({USN:1});
+            students.forEach((student)=>{
+                for(let i=0; i<student.subEnrolled.length; i++){
+                    if(student.subEnrolled[i].subject.code===subject){
+                        studentDetails.push(student);
+                    }
+                }
+            });
+        }
+        //case 3
+        else if(branchCode && subject){
+            const students = await Student.find({branch:branchCode, academicYear:academinYear, semester:semester}).populate("subEnrolled.subject").sort({USN:1});
+            students.forEach((student)=>{
+                for(let i=0; i<student.subEnrolled.length; i++){
+                    if(student.subEnrolled[i].subject.code===subject){
+                        studentDetails.push(student);
+                    }
+                }
+            });
+        }
         //consolidate the data
         let reportData = [];
         for(let i=0; i<studentDetails.length; i++){
+            const branchDetails = await Branch.find({code:studentDetails[i].branch});
             let studentObj = {
                 "usn":studentDetails[i].USN,
                 "name":studentDetails[i].Name,
@@ -514,6 +538,17 @@ const upgradeSem = async(req,res,next)=>{
         res.status(400).send({"message":err.message});
     }
 }
+
+const getPresentSubjects = async(req,res,next)=>{
+    try{
+        const subjects = await Subject.find({},{_id:0,__v:0,createdAt:0,updatedAt:0,cycle:0,type:0,mandatedBranches:0,excludedBranches:0,maxCount:0,enrolledCount:0});
+        res.send({"message":"successfull","subjectData":subjects});
+    }catch(err){
+        //sending the error message in case something goes wrong
+        console.log(err)
+        res.status(400).send({"message":err.message});
+    }
+}
 module.exports = {
     viewStudents, 
     viewPasswords, 
@@ -534,5 +569,6 @@ module.exports = {
     setStatus,
     getSubjectsStatus,
     generateReport,
-    upgradeSem
+    upgradeSem,
+    getPresentSubjects
 }

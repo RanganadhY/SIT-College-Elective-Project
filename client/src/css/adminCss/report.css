@@ -91,3 +91,11 @@ table.report .headerRow{
     background-color: #4caf50;
     color: white;
 }
+
+table.report .headerRow:hover{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    background-color: #4caf50;
+    color: white;
+}

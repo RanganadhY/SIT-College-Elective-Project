@@ -21,7 +21,8 @@ const {
     setStatus,
     getSubjectsStatus,
     generateReport,
-    upgradeSem
+    upgradeSem,
+    getPresentSubjects
         } = require("../controllers/admin");
 
 router.post("/view-students",viewStudents);
@@ -44,5 +45,6 @@ router.post("/set-status",setStatus);
 router.post("/get-subjects-status",getSubjectsStatus);
 router.post("/generate-report",generateReport);
 router.post("/upgrade-sem",upgradeSem);
+router.get("/get-present-subjects",getPresentSubjects);
 
 module.exports = router;
