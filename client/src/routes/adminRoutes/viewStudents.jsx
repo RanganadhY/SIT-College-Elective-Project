@@ -59,7 +59,7 @@ function ViewStudents() {
         for(let i=0;i<studentsList.length;i++){
             let Obj = {
                 ...studentsList[i],
-                password: randomize('Aa0', 10),
+                password: randomize('0', 6),
                 branch: stateData.branch,
                 semester: stateData.semester,
                 academicYear: stateData.academicYear
