@@ -36,7 +36,7 @@ const studentLogin = async(req,res,next)=>{
         const user = await sutdentModel.findOne({"USN":studentUsn}).select("+password");
         if(!user){
             return res.status(404).json({
-                "message":"Student Not Present",
+                "message":"Invalid Credential",
                 "status":404
             })
             

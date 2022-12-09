@@ -12,6 +12,7 @@ function VeiwElidgleSubjects() {
     //using useLocation hook to get the state that has 
     //been passed down from the student login page
     const {state} = useLocation();
+    console.log(state)
     const navigate = useNavigate();
 
     const studentUsn = state[1]
@@ -170,7 +171,13 @@ function VeiwElidgleSubjects() {
                 possibleESCSubsTotake,
                 possibleSlectiveSubsTotake,
                 statusOfOptingSubs,
-                "USN":state[1]
+                "USN":state[1],
+                "studentProfile":{
+                    "name":studentProfile.name,
+                    "cycle":studentProfile.cycle,
+                    "branch":studentProfile.branch,
+                    "semester":studentProfile.semester
+                }
             }
             console.log(studentStateofOpting);
             navigate("/opting-subjects",{state:studentStateofOpting})
@@ -182,35 +189,42 @@ function VeiwElidgleSubjects() {
     }
 
     const handleVeiwOpetedSubs = async()=>{
-
-        await axios.post("/student/registered-subjects",
-            {
-                "usn":studentUsn
-            },
-            {
-                headers: { 
-                    'Content-Type': 'application/json',
-                    "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+        try{
+            await axios.post("/student/registered-subjects",
+                {
+                    "usn":studentUsn
                 },
-                withCredentials: true
-            }
-        ).then((response)=>{
-            if(response.data.studiedSubjects.length===0){
-                alert("You haven't opted any subjects yet")
-            }
-            else{
-                navigate("/veiw-opted-subjects",
-                {state:{
-                    "studentDetails":{
-                        "studentUsn":studentUsn,
-                        "name":studentProfile.name,
-                        "branch":studentProfile.branch,
-                        "semester":studentProfile.semester,
-                        "cycle":studentProfile.cycle
+                {
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        "authorization":"Bearer "+String(localStorage.getItem("authToken"))
                     },
-                    "optedSubjects":response.data.studiedSubjects}})
-            }
-        })
+                    withCredentials: true
+                }
+            ).then((response)=>{
+                if(response.data.studiedSubjects.length===0){
+                    alert("You haven't opted any subjects yet")
+                }
+                else{
+                    navigate("/veiw-opted-subjects",
+                    {state:{
+                        "studentDetails":{
+                            "studentUsn":studentUsn,
+                            "name":studentProfile.name,
+                            "branch":studentProfile.branch,
+                            "semester":studentProfile.semester,
+                            "cycle":studentProfile.cycle
+                        },
+                        "optedSubjects":response.data.studiedSubjects}})
+                }
+            }).catch((err)=>{
+                throw(err)
+            })
+        }
+        catch(err){
+            console.log(err)
+            alert(err.message)
+        }
         
     }
 
