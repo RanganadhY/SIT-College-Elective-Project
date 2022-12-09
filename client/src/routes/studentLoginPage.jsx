@@ -28,13 +28,15 @@ function StudentLoginPage() {
     const navigate = useNavigate();
     const handleStudentLogin = async(e)=>{
         e.preventDefault();
+        
         var studentEnteredDetails = {
-            studentUsn,
+            "studentUsn":studentUsn,
             "password":studentPassword
         }
         try{
             setisLoading(true);
             if(window.navigator.onLine){
+
                 await axios.post("/authentication/student-login",studentEnteredDetails,
                     {
                         headers: { 'Content-Type': 'application/json' },
@@ -89,7 +91,7 @@ function StudentLoginPage() {
             
         }catch(error){
                 setisLoading(false)
-                // seterrorMessage(error.response.data.message)
+                seterrorMessage(error.response.data.message)
                 console.log(error)
                 
         }
@@ -108,7 +110,7 @@ function StudentLoginPage() {
             <div className="loginPage-main-wrapper">
                 <div className="loginPage-main-container">
                     <div className="loginPage-col0-container">
-                        <h2>Siddaganga Institue of Technology, Tumakuru</h2>
+                        <h2>Siddaganga Institute of Technology, Tumakuru</h2>
                     </div>
                     <div className="loginPage-col12-container">
                         <div className="loginPage-col1-container">
@@ -125,7 +127,7 @@ function StudentLoginPage() {
                                             <input 
                                                 type="text"
                                                 value={studentUsn}
-                                                onChange={(e)=>setstudentUsn(e.target.value)}
+                                                onChange={(e)=>setstudentUsn(e.target.value.toUpperCase())}
                                                 required="true"
                                                 />
                                             <span>USN</span>

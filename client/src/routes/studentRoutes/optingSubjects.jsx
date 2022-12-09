@@ -9,7 +9,7 @@ import axios from "../../axios/axios"
 function OptingSubjects() {
 
     const {state} = useLocation();
-    // console.log(state)
+    const studentProfile = state.studentProfile
     const navigate = useNavigate()
 
     const [isLoading, setisLoading] = useState(false);
@@ -110,18 +110,49 @@ function OptingSubjects() {
                         },
                         withCredentials: true
                     }
-                    ).then((response)=>{
+                    ).then(async (response)=>{
                         console.log(response)
                         if(response.status ===200){
                             if(response.data.code === 608){
                                 setelectiveMsg(response.data.message);//saved sucessfully
                                 setisElectiveSubSaved(true)
                                 alert(response.data.message);
-                                navigate("/")
+                                await axios.post("/student/registered-subjects",
+                                    {
+                                        "usn":state.USN
+                                    },
+                                    {
+                                        headers: { 
+                                            'Content-Type': 'application/json',
+                                            "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                                        },
+                                        withCredentials: true
+                                    }
+                                ).then((response)=>{
+                                    if(response.data.studiedSubjects.length===0){
+                                        alert("You haven't opted any subjects yet")
+                                    }
+                                    else{
+                                        navigate("/veiw-opted-subjects",
+                                        {state:{
+                                            "studentDetails":{
+                                                "studentUsn":state.USN,
+                                                "name":studentProfile.name,
+                                                "branch":studentProfile.branch,
+                                                "semester":studentProfile.semester,
+                                                "cycle":studentProfile.cycle
+                                            },
+                                            "optedSubjects":response.data.studiedSubjects}})
+                                    }
+                                }).catch((err)=>{
+                                    
+                                    throw(err)
+                                })
+        
 
                             }
                             else if(response.data.code === 607){
-                                setelectiveMsg(response.data.message); //you have 
+                                setelectiveMsg(response.data.message); //you have already for subjects
                                 setisElectiveSubSaved(true);
                                 alert(response.data.message)
                             }
