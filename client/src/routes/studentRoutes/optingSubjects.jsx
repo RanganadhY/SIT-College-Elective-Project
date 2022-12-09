@@ -1,4 +1,4 @@
-    import React,{useState} from 'react'
+    import React,{useState,useEffect} from 'react'
 import {useNavigate, useLocation} from "react-router-dom"
 //importing style sheet
 import "../../css/studentCss/optingSubjects.css"
@@ -9,6 +9,7 @@ import axios from "../../axios/axios"
 function OptingSubjects() {
 
     const {state} = useLocation();
+    console.log(state)
     const studentProfile = state.studentProfile
     const navigate = useNavigate()
 
@@ -22,7 +23,8 @@ function OptingSubjects() {
     const [isElectiveSubSaved, setisElectiveSubSaved] = useState(false)
     const [electiveMsg, setelectiveMsg] = useState("");
 
-    const [errMsg, seterrMsg] = useState("");
+    const [subjectSelectedStatus, setsubjectSelectedStatus] = useState([])
+
 
     // console.log(state.possibleESCSubsTotake)
 
@@ -183,6 +185,37 @@ function OptingSubjects() {
         
     }
 
+    useEffect(()=>{
+        async function getSubjectSelectionStatus(){
+            try{
+                await axios.post("/student/student-details",
+                    {
+                        "usn":state.USN
+                    },
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            "authorization":"Bearer "+String(localStorage.getItem("authToken"))
+                        },
+                        withCredentials: true
+                    }
+                ).then(async(response)=>{
+                    await setsubjectSelectedStatus(response.data.studentProfile.subjectSelection)
+                    if(response.data.studentProfile.subjectSelection[0]){
+                        setisEscSaved(true)
+                    }
+                    
+                }).catch((error)=>{
+                    throw(error)
+                })
+            }catch(error){
+                console.log(error)
+            }
+            
+        }
+        getSubjectSelectionStatus();
+    },[]);
+    console.log(subjectSelectedStatus)
     return (
         <>
             {
@@ -193,41 +226,46 @@ function OptingSubjects() {
                     <div className="os-main-heading">
                         <h2>Select Your Subjects below</h2>
                     </div>
-                
+
                     <div className="os-selection-selection">
-                    <div className="os-Esc-selection" disabled={true}>
-                        <div className="os-esc-heading">
-                            <h3>Engineering Science Course:</h3>
-                        </div>
-                        <div className="os-esc-subject-select-option">
-                                <select 
-                                    name="" 
-                                    id=""
-                                    disabled={isEscSaved}
-                                    value={escSubState}
-                                    onChange={(e)=>setescSubState(e.target.value)}
-                                    >
-                                    
-                                    <option   value="NA">-SELECT-</option>
-                                    {state.possibleESCSubsTotake&&state.possibleESCSubsTotake.map((key,index)=>{
-                                        return(
-                                            <option 
-                                                value={state.possibleESCSubsTotake[index].code}>
-                                                {state.possibleESCSubsTotake[index].name}
-                                            </option>
-                                        )
-                                        
-                                    })}
-                                </select>
-                                <div className="os-esc-save-option">
-                                    <button
+                        {
+                            !subjectSelectedStatus[0] 
+                            &&
+                            <div className="os-Esc-selection">
+                            <div className="os-esc-heading">
+                                <h3>Engineering Science Course:</h3>
+                            </div>
+                            <div className="os-esc-subject-select-option">
+                                    <select 
+                                        name="" 
+                                        id=""
                                         disabled={isEscSaved}
-                                        className={isEscSaved?"os-esc-save-button-disabled":'os-esc-save-button'}
-                                        onClick={handleEscSave}
-                                    >Save</button>
+                                        value={escSubState}
+                                        onChange={(e)=>setescSubState(e.target.value)}
+                                        >
+                                        
+                                        <option   value="NA">-SELECT-</option>
+                                        {state.possibleESCSubsTotake&&state.possibleESCSubsTotake.map((key,index)=>{
+                                            return(
+                                                <option 
+                                                    value={state.possibleESCSubsTotake[index].code}>
+                                                    {state.possibleESCSubsTotake[index].name}
+                                                </option>
+                                            )
+                                            
+                                        })}
+                                    </select>
+                                    <div className="os-esc-save-option">
+                                        <button
+                                            disabled={isEscSaved}
+                                            className={isEscSaved?"os-esc-save-button-disabled":'os-esc-save-button'}
+                                            onClick={handleEscSave}
+                                        >Save</button>
+                                    </div>
                                 </div>
                             </div>
-                    </div>
+                        }
+                        
                         <div className="os-elective-selection">
                             <div className="os-esc-heading">
                                 <h3>Elective Course:</h3>
