@@ -139,17 +139,18 @@ const optSubject = async(req,res,next) =>{
 
         //find the subject details from the subject code and check count and update
         await lock.acquire('subject', async function() {
+            const subjectDetails2 = await Subject.find({code:subjectCode});
             if(
-                subjectDetails[0].type==="ESC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][0]===true ||
-                subjectDetails[0].type==="CYC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][1]===true
+                subjectDetails2[0].type==="ESC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][0]===true ||
+                subjectDetails2[0].type==="CYC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][1]===true
             ){
                 throw({"message":"A Subject in this group has already been taken.","code":606});
                 return;
             }
 
-            const studentsTaken = await Student.find({"subEnrolled.subject":subjectDetails[0]._id});
+            const studentsTaken = await Student.find({"subEnrolled.subject":subjectDetails2[0]._id});
 
-            if(subjectDetails[0].enrolledCount >= subjectDetails[0].maxCount || studentsTaken.length > subjectDetails[0].maxCount){  
+            if(subjectDetails2[0].enrolledCount >= subjectDetails2[0].maxCount || studentsTaken.length > subjectDetails2[0].maxCount){  
                 throw({"message":"Subject full","code":606});
                 return; //suma
             }else{
@@ -163,7 +164,7 @@ const optSubject = async(req,res,next) =>{
                     return;
                 }
 
-                studentDetails[0].subEnrolled.push({subject:subjectDetails[0]._id,sem:studentDetails[0].sem});
+                studentDetails[0].subEnrolled.push({subject:subjectDetails2[0]._id,sem:studentDetails[0].sem});
                 await Subject.updateOne({code:subjectCode},{ $inc: {enrolledCount:1}});
                 await studentDetails[0].save({"multi":true}).catch(async(err) => {
                     console.log(err);
