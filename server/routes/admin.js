@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Student = require("../models/student");
 
 const {
     viewStudents, 
@@ -47,4 +48,10 @@ router.post("/generate-report",generateReport);
 router.post("/upgrade-sem",upgradeSem);
 router.get("/get-present-subjects",getPresentSubjects);
 
+router.get("/delete",async(req,res)=>{
+    // await Student.updateMany({},{selectedSems:[[false,false],[false,false]],subEnrolled:[]});
+    const data = await Student.find({"subEnrolled.subject":"63916f23451f3e70b470ed20"});
+    console.log(data.length)
+    res.send("done")
+})
 module.exports = router;

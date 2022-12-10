@@ -112,7 +112,7 @@ const optSubject = async(req,res,next) =>{
 
         //checking if the subject has been taken already
         if(studiedSubjectsCodes.includes(subjectCode)){
-            res.status(200).send({"message":"Subject already studied","code":602});
+            res.status(200).send({"message":"Subject already Selected","code":602});
             return;
         }
 
@@ -139,27 +139,39 @@ const optSubject = async(req,res,next) =>{
 
         //find the subject details from the subject code and check count and update
         await lock.acquire('subject', async function() {
-            if(subjectDetails[0].enrolledCount >= subjectDetails[0].maxCount){  
-                // res.status(200).send({"message":"Subject full","code":606});
-                // return;
+            if(
+                subjectDetails[0].type==="ESC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][0]===true ||
+                subjectDetails[0].type==="CYC" && studentDetails[0].selectedSems[studentDetails[0].semester-1][1]===true
+            ){
+                throw({"message":"A Subject in this group has already been taken.","code":606});
+                return;
+            }
+
+            const studentsTaken = await Student.find({"subEnrolled.subject":subjectDetails[0]._id});
+
+            if(subjectDetails[0].enrolledCount >= subjectDetails[0].maxCount || studentsTaken.length > subjectDetails[0].maxCount){  
                 throw({"message":"Subject full","code":606});
+                return; //suma
+            }else{
+                //rechecking if the subjects have been already taken
+                if(studentDetails[0].selectedSems[studentDetails[0].semester-1][0] === false)
+                    studentDetails[0].selectedSems[studentDetails[0].semester-1]=[true,false];
+                else if(studentDetails[0].selectedSems[studentDetails[0].semester-1][1] === false)
+                    studentDetails[0].selectedSems[studentDetails[0].semester-1]=[true,true];
+                else{
+                    res.status(200).send({"message":"You have already registered for the subjects","code":607});
+                    return;
+                }
+
+                studentDetails[0].subEnrolled.push({subject:subjectDetails[0]._id,sem:studentDetails[0].sem});
+                await Subject.updateOne({code:subjectCode},{ $inc: {enrolledCount:1}});
+                await studentDetails[0].save({"multi":true}).catch(async(err) => {
+                    console.log(err);
+                    await Subject.updateOne({code:subjectCode},{$inc:{enrolledCount:-1}});
+                    res.status(400).send({"message":"error"});
+                    return;
+                });
             }
-            studentDetails[0].subEnrolled.push({subject:subjectDetails[0]._id,sem:studentDetails[0].sem});
-            if(studentDetails[0].selectedSems[studentDetails[0].semester-1][0] === false)
-                studentDetails[0].selectedSems[studentDetails[0].semester-1]=[true,false];
-            else if(studentDetails[0].selectedSems[studentDetails[0].semester-1][1] === false)
-                studentDetails[0].selectedSems[studentDetails[0].semester-1]=[true,true];
-            else{
-                res.status(200).send({"message":"You have already registered for the subjects","code":607});
-                return;
-            }
-            await Subject.updateOne({code:subjectCode},{enrolledCount:1+subjectDetails[0].enrolledCount});
-            await studentDetails[0].save({"multi":true}).catch(async(err) => {
-                console.log(err);
-                await Subject.updateOne({code:subjectCode},{$inc:{enrolledCount:-1}});
-                res.status(400).send({"message":"error"});
-                return;
-            });
         })
         .then(function(err, ret) {
             if(err){
@@ -175,6 +187,7 @@ const optSubject = async(req,res,next) =>{
         //sending the error message in case something goes wrong
         if(err.code === 606){
             res.status(200).send({"message":err.message,"code":606});
+            return;
         }else
             console.log(err);
             res.status(400).send({"message":err.message});
@@ -218,6 +231,7 @@ const getRegisteredSubjects = async(req,res) =>{
         //sending the error message in case something goes wrong
         console.log(err);
         res.status(400).send({"message":err.message});
+        return; //10dec
     }
 }
 
