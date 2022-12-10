@@ -1,10 +1,10 @@
 require("./db/mongoose");
-const express=require("express");
+const express=require("express")
 const app=express();
 
 //admin routes
-const adminRoutes = require("./routes/admin");
-const studentRoutes = require("./routes/student");
+const adminRoutes = require("./routes/admin")
+const studentRoutes = require("./routes/student")
 
 //authentication routes
 const auth = require("./routes/auth");
